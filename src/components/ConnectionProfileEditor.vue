@@ -72,6 +72,14 @@ export default defineComponent({
       (value) => {
         return (value && value.length > 0) || 'Profile name is required';
       },
+      (value) => {
+        if (isNewProfile) {
+          return (
+            profiles.byName(value) === undefined || 'Profile name is taken'
+          );
+        }
+        return true;
+      },
     ] as Validator[];
 
     const onReset = () => {
