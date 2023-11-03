@@ -1,5 +1,10 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-md row justify-start">
+    <connection-profile-view
+      v-for="profile in profiles.profiles"
+      :key="profile.name"
+      :profile="profile"
+    />
     <q-footer class="q-pa-lg" style="background-color: white">
       <div class="column">
         <div class="col self-end">
@@ -26,11 +31,11 @@ import { useQuasar } from 'quasar';
 import { ConnectionProfile, useProfileStore } from '../stores/profiles';
 
 import ConnectionProfileEditor from '../components/ConnectionProfileEditor.vue';
-// import ConnectionProfileView from '../components/ConnectionProfileView.vue';
+import ConnectionProfileView from '../components/ConnectionProfileView.vue';
 
 export default defineComponent({
   name: 'MainPage',
-  // components: { ConnectionProfileView },
+  components: { ConnectionProfileView },
   setup() {
     const q = useQuasar();
     const profiles = useProfileStore();
@@ -39,7 +44,7 @@ export default defineComponent({
       q.dialog({
         component: ConnectionProfileEditor,
       }).onOk((profile: ConnectionProfile) => {
-        console.log(profile);
+        profiles.put(profile);
       });
     };
 

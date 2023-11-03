@@ -1,0 +1,42 @@
+version: '3'
+
+networks:
+  webmesh:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/24
+          gateway: 10.1.0.1
+        - subnet: 2001:db8:3200::/64
+          gateway: 2001:db8:3200::1
+
+volumes:
+  webmesh-data:
+
+services:
+  daemon:
+    image: ghcr.io/webmeshproj/node:v0.15.10
+    networks:
+      webmesh:
+        ipv4_address: 10.1.0.2
+        ipv6_address: 2001:db8:3200::2
+    entrypoint:
+      - /webmesh-node
+      - --daemon.enabled=true
+      - --daemon.grpc-web=true
+      - --daemon.bind=[::]:58080
+      - --daemon.ui.enabled=true
+      - --daemon.ui.listen-address=[::]:8080
+      - --daemon.persistence.path=/data
+    volumes:
+      - webmesh-data:/data
+      - /dev/net/tun:/dev/net/tun
+      - /lib/modules:/lib/modules
+    cap_add: ['NET_ADMIN', 'NET_RAW', 'SYS_MODULE']
+    ports:
+      - '58080:58080'
+      - '8080:8080'
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0

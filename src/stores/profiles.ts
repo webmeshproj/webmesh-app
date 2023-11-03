@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { Platform } from 'quasar';
 import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
 
 export interface ConnectionProfile {
@@ -7,7 +8,10 @@ export interface ConnectionProfile {
 }
 
 export const useProfileStore = defineStore('profiles', {
-  persist: true,
+  persist:
+    Platform.is.electron ||
+    Platform.is.nativeMobile ||
+    process.env.PERSIST_DATA === 'true',
 
   state: () => ({
     connectionProfiles: [] as ConnectionProfile[],
