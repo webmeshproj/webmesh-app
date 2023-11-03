@@ -12,17 +12,17 @@ export const useProfileStore = defineStore('profile', {
   }),
 
   getters: {
-    profiles(state): ConnectionProfile[] {
+    all(state): ConnectionProfile[] {
       return state.profiles;
     },
-    profileByName(state): (name: string) => ConnectionProfile | undefined {
+    byName(state): (name: string) => ConnectionProfile | undefined {
       return (name: string) => state.profiles.find((p) => p.name === name);
     },
   },
 
   actions: {
     put(profile: ConnectionProfile) {
-      const existing = this.profileByName(profile.name);
+      const existing = this.byName(profile.name);
       if (existing) {
         const index = this.profiles.indexOf(existing);
         if (index > -1) {
@@ -39,7 +39,7 @@ export const useProfileStore = defineStore('profile', {
       }
     },
     removeByName(name: string) {
-      const profile = this.profileByName(name);
+      const profile = this.byName(name);
       if (profile) {
         this.remove(profile);
       }
