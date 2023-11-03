@@ -6,19 +6,20 @@ export interface ConnectionProfile {
   params: ConnectRequest;
 }
 
-export const useProfileStore = defineStore('profile', {
+export const useProfileStore = defineStore('profiles', {
   persist: true,
 
   state: () => ({
-    profiles: [] as ConnectionProfile[],
+    connectionProfiles: [] as ConnectionProfile[],
   }),
 
   getters: {
-    all(state): ConnectionProfile[] {
-      return state.profiles;
+    profiles(state): ConnectionProfile[] {
+      return state.connectionProfiles;
     },
     byName(state): (name: string) => ConnectionProfile | undefined {
-      return (name: string) => state.profiles.find((p) => p.name === name);
+      return (name: string) =>
+        state.connectionProfiles.find((p) => p.name === name);
     },
   },
 

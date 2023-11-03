@@ -72,7 +72,7 @@ export default defineComponent({
       props.profile ?? ({} as ConnectionProfile)
     );
 
-    const nameInputRef = ref<QInput>({} as QInput);
+    const nameInputRef = ref<QInput | null>(null);
     const nameRules = [
       (value) => {
         return (value && value.length > 0) || 'Profile name is required';
@@ -92,8 +92,8 @@ export default defineComponent({
     };
 
     const onSubmit = () => {
-      nameInputRef.value.validate();
-      if (nameInputRef.value.hasError) {
+      nameInputRef?.value?.validate();
+      if (nameInputRef?.value?.hasError) {
         return;
       }
       onDialogOK(thisProfile.value);

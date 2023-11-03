@@ -1,23 +1,23 @@
 import { defineStore } from 'pinia';
 
-export const DefaultDaemonAddress = '127.0.0.1:8080';
+export const DefaultDaemonAddress = '127.0.0.1:8081';
 
 export const useSettingsStore = defineStore('settings', {
   persist: true,
 
   state: () => ({
-    daemonAddress: DefaultDaemonAddress,
+    daemonAddr: DefaultDaemonAddress,
   }),
 
   getters: {
-    getDaemonAddress(state): string {
-      return state.daemonAddress;
+    daemonAddress(state): string {
+      return state.daemonAddr;
     },
   },
 
   actions: {
     setDaemonAddress(addr: string) {
-      this.daemonAddress = addr;
+      this.daemonAddr = addr;
     },
   },
 });

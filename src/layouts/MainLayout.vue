@@ -8,14 +8,13 @@
           </q-avatar>
           Webmesh
         </q-toolbar-title>
-        <q-space />
         <q-input
           dark
           borderless
           dense
           label="Daemon Address"
           v-model="daemonAddress"
-          class="q-ml-md"
+          class="q-pt-sm"
           :rules="[
             (val) => (val && val.length > 0) || 'Daemon address is required',
           ]"
@@ -55,7 +54,7 @@ export default defineComponent({
   components: {},
   setup() {
     const settings = useSettingsStore();
-    const daemonAddress = ref<string>(settings.getDaemonAddress);
+    const daemonAddress = ref<string>(settings.daemonAddress);
     const onUpdate = () => {
       settings.setDaemonAddress(daemonAddress.value);
     };
