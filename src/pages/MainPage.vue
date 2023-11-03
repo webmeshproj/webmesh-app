@@ -4,12 +4,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useProfileStore } from '../stores/profiles';
 
 export default defineComponent({
   name: 'IndexPage',
   components: {},
   setup() {
-    return {};
+    const profiles = useProfileStore();
+    return { profiles };
   },
 });
 </script>
