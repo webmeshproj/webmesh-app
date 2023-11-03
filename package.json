@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
-    "@webmesh/api": "https://github.com/webmeshproj/api/",
+    "@webmesh/api": "https://github.com/webmeshproj/api",
+    "pinia": "^2.1.7",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0"
