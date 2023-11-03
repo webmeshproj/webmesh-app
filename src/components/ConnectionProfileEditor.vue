@@ -21,8 +21,13 @@
           />
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn color="primary" label="Save" type="submit" @click="onSubmit" />
-          <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+          <q-btn
+            color="positive"
+            label="Save"
+            type="submit"
+            @click="onSubmit"
+          />
+          <q-btn color="negative" label="Cancel" @click="onCancelClick" />
           <q-btn
             label="Reset"
             type="reset"
@@ -67,7 +72,7 @@ export default defineComponent({
       props.profile ?? ({} as ConnectionProfile)
     );
 
-    const nameInputRef = ref<QInput | null>(null);
+    const nameInputRef = ref<QInput>({} as QInput);
     const nameRules = [
       (value) => {
         return (value && value.length > 0) || 'Profile name is required';
@@ -87,8 +92,8 @@ export default defineComponent({
     };
 
     const onSubmit = () => {
-      nameInputRef?.value?.validate();
-      if (nameInputRef?.value?.hasError) {
+      nameInputRef.value.validate();
+      if (nameInputRef.value.hasError) {
         return;
       }
       onDialogOK(thisProfile.value);
