@@ -4,7 +4,6 @@ import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
 
 export interface ConnectionProfile {
   name: string;
-  params: ConnectRequest;
 }
 
 export const useProfileStore = defineStore('profiles', {
@@ -50,6 +49,9 @@ export const useProfileStore = defineStore('profiles', {
       if (profile) {
         this.delete(profile);
       }
+    },
+    newConnectRequest(/** profile: string */): ConnectRequest {
+      return new ConnectRequest();
     },
   },
 });
