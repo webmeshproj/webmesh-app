@@ -4,6 +4,8 @@
       v-for="profile in profiles.profiles"
       :key="profile.name"
       :profile="profile"
+      @on-edit="onEditProfileClick"
+      @on-delete="onDeleteProfileClick"
     />
     <q-footer class="q-pa-lg" style="background-color: white">
       <div class="column">
@@ -48,7 +50,32 @@ export default defineComponent({
       });
     };
 
-    return { profiles, onAddProfileClick };
+    const onEditProfileClick = (profile: ConnectionProfile) => {
+      q.dialog({
+        component: ConnectionProfileEditor,
+        componentProps: { profile },
+      }).onOk((profile: ConnectionProfile) => {
+        profiles.put(profile);
+      });
+    };
+
+    const onDeleteProfileClick = (profile: ConnectionProfile) => {
+      q.dialog({
+        title: 'Delete Profile',
+        message: `Are you sure you want to delete the profile ${profile.name}?`,
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {
+        profiles.delete(profile);
+      });
+    };
+
+    return {
+      profiles,
+      onAddProfileClick,
+      onEditProfileClick,
+      onDeleteProfileClick,
+    };
   },
 });
 </script>

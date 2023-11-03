@@ -39,16 +39,16 @@ export const useProfileStore = defineStore('profiles', {
         this.profiles.push(profile);
       }
     },
-    remove(profile: ConnectionProfile) {
+    delete(profile: ConnectionProfile) {
       const index = this.profiles.indexOf(profile);
       if (index > -1) {
         this.profiles.splice(index, 1);
       }
     },
-    removeByName(name: string) {
+    deleteByName(name: string) {
       const profile = this.byName(name);
       if (profile) {
-        this.remove(profile);
+        this.delete(profile);
       }
     },
   },
