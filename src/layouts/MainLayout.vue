@@ -47,16 +47,16 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { DefaultDaemonAddress, useSettingsStore } from '../stores/settings';
+import { DefaultDaemonAddress, useClientStore } from '../stores/client';
 
 export default defineComponent({
   name: 'MainLayout',
   components: {},
   setup() {
-    const settings = useSettingsStore();
-    const daemonAddress = ref<string>(settings.daemonAddress);
+    const clientSettings = useClientStore();
+    const daemonAddress = ref<string>(clientSettings.daemonAddress);
     const onUpdate = () => {
-      settings.setDaemonAddress(daemonAddress.value);
+      clientSettings.setDaemonAddress(daemonAddress.value);
     };
     return {
       DefaultDaemonAddress,
@@ -66,3 +66,4 @@ export default defineComponent({
   },
 });
 </script>
+../stores/client
