@@ -55,6 +55,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ConnectionProfile } from '../stores/profiles';
+import { useClientStore } from '../stores/client';
 
 export default defineComponent({
   name: 'ConnectionProfileView',
@@ -67,7 +68,8 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const client = useClientStore();
+    return { client };
   },
 });
 </script>
