@@ -7,6 +7,8 @@ export interface ConnectionProfile {
 }
 
 export const useProfileStore = defineStore('profile', {
+  persist: true,
+
   state: () => ({
     profiles: [] as ConnectionProfile[],
   }),
