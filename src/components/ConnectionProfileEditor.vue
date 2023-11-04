@@ -1,9 +1,7 @@
 <template>
   <q-dialog persistent ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
-      <q-card-section>
-        <div class="text-h6">{{ title }}</div>
-      </q-card-section>
+      <div class="text-h6 q-pa-md">{{ title }}</div>
       <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
         <q-card-section>
           <q-input
@@ -25,10 +23,26 @@
               icon="router"
               label="Network"
             >
-              <q-checkbox
-                v-model="profile.bootstrap.enabled"
-                label="Label on Right"
-              />
+              <q-card-section>
+                <q-select
+                  label="Join Addresses"
+                  dense
+                  v-model="profile.addrs"
+                  use-input
+                  use-chips
+                  multiple
+                  hide-dropdown-icon
+                  input-debounce="0"
+                  new-value-mode="add-unique"
+                  :disable="profile.bootstrap.enabled"
+                />
+                <q-checkbox
+                  dense
+                  v-model="profile.bootstrap.enabled"
+                  size="xs"
+                  label="Bootstrap network"
+                />
+              </q-card-section>
             </q-expansion-item>
             <q-expansion-item
               dense
@@ -36,6 +50,59 @@
               icon="verified_user"
               label="Security"
             >
+              <q-card-section>
+                <div class="q-mx-sm text-caption">Authentication</div>
+                <div class="row q-pa-sm justify-around">
+                  <q-radio
+                    dense
+                    v-model="profile.authMethod"
+                    checked-icon="task_alt"
+                    :val="NetworkAuthMethod.NO_AUTH"
+                    label="None"
+                  />
+                  <q-radio
+                    dense
+                    v-model="profile.authMethod"
+                    checked-icon="task_alt"
+                    :val="NetworkAuthMethod.BASIC"
+                    label="Basic"
+                  />
+                  <q-radio
+                    dense
+                    v-model="profile.authMethod"
+                    checked-icon="task_alt"
+                    :val="NetworkAuthMethod.LDAP"
+                    label="LDAP"
+                  />
+                  <q-radio
+                    dense
+                    v-model="profile.authMethod"
+                    checked-icon="task_alt"
+                    :val="NetworkAuthMethod.ID"
+                    label="ID"
+                  />
+                  <q-radio
+                    dense
+                    v-model="profile.authMethod"
+                    checked-icon="task_alt"
+                    :val="NetworkAuthMethod.MTLS"
+                    label="mTLS"
+                    @click="profile.tls.enabled = true"
+                  />
+                </div>
+              </q-card-section>
+              <q-card-section>
+                <div class="q-mx-sm text-caption">TLS</div>
+                <div class="row q-pa-sm justify-start">
+                  <q-checkbox
+                    dense
+                    v-model="profile.tls.enabled"
+                    size="xs"
+                    label="Enabled"
+                    :disable="profile.authMethod === NetworkAuthMethod.MTLS"
+                  />
+                </div>
+              </q-card-section>
             </q-expansion-item>
             <q-expansion-item
               dense
@@ -43,6 +110,7 @@
               icon="rss_feed"
               label="Services"
             >
+              <q-card-section> </q-card-section>
             </q-expansion-item>
           </q-list>
         </q-card-section>
@@ -70,17 +138,24 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useDialogPluginComponent, QInput } from 'quasar';
-import {
-  ConnectionProfile,
-  ConnectionProfileSkeleton,
-  profileToSkeleton,
-  useProfileStore,
-} from '../stores/profiles';
+import { NetworkAuthMethod } from '@webmesh/api/ts/v1/app_pb';
+import { ConnectionProfile, useProfileStore } from '../stores/profiles';
 
 const NewConnectionTitle = 'New Connection Profile';
 const EditConnectionTitle = 'Edit Connection Profile';
 
 type Validator = (value: string) => boolean | string;
+
+function defaultConnectionProfile(): ConnectionProfile {
+  return {
+    id: '',
+    authMethod: NetworkAuthMethod.NO_AUTH,
+    networking: {},
+    bootstrap: { enabled: false },
+    tls: { enabled: false },
+    services: { enabled: false },
+  } as ConnectionProfile;
+}
 
 export default defineComponent({
   name: 'ConnectionProfileEditor',
@@ -96,17 +171,15 @@ export default defineComponent({
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
     const profiles = useProfileStore();
-    const isNewProfile = props.current === undefined;
+    const isNewProfile = !props.current?.id;
     const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
-    const profile = ref<ConnectionProfileSkeleton>(
-      profileToSkeleton(props.current) ?? ({} as ConnectionProfileSkeleton)
+    const profile = ref<ConnectionProfile>(
+      props.current ? { ...props.current } : { ...defaultConnectionProfile() }
     );
-    // Ensure empty structs are defined
-    if (!profile.value.bootstrap) {
-      profile.value.bootstrap = {
-        enabled: false,
-      };
-    }
+    const onReset = () =>
+      (profile.value = props.current
+        ? { ...props.current }
+        : { ...defaultConnectionProfile() });
 
     const nameInputRef = ref<QInput | null>(null);
     const nameRules = [
@@ -123,11 +196,6 @@ export default defineComponent({
       },
     ] as Validator[];
 
-    const onReset = () => {
-      profile.value =
-        profileToSkeleton(props.current) ?? ({} as ConnectionProfileSkeleton);
-    };
-
     const onSubmit = () => {
       nameInputRef?.value?.validate();
       if (nameInputRef?.value?.hasError) {
@@ -137,6 +205,7 @@ export default defineComponent({
     };
 
     return {
+      NetworkAuthMethod,
       title,
       isNewProfile,
       profile,
