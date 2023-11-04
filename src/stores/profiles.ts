@@ -1,9 +1,43 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
-import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
+import { ConnectRequest, NetworkAuthMethod } from '@webmesh/api/ts/v1/app_pb';
+import { Feature } from '@webmesh/api/ts/v1/node_pb';
 import type { PartialMessage } from '@bufbuild/protobuf';
 
-export type ConnectionProfile = Required<PartialMessage<ConnectRequest>>;
+type RecursiveRequired<T> = Required<{
+  [P in keyof T]: T[P] extends object | undefined
+    ? RecursiveRequired<Required<T[P]>>
+    : T[P];
+}>;
+
+export type ConnectionProfile = RecursiveRequired<
+  PartialMessage<ConnectRequest>
+>;
+
+export function newDefaultConnectionProfile(): ConnectionProfile {
+  return {
+    id: '',
+    authMethod: NetworkAuthMethod.NO_AUTH,
+    authCredentials: {},
+    networking: {},
+    bootstrap: { enabled: false },
+    tls: {
+      enabled: false,
+      skipVerify: false,
+      verifyChainOnly: false,
+    },
+    services: {
+      enabled: false,
+      listenAddress: '[::]:8443',
+      features: [] as Feature[],
+      dns: {
+        enabled: false,
+        listenUDP: '[::]:53',
+        listenTCP: '[::]:53',
+      },
+    },
+  } as ConnectionProfile;
+}
 
 export const useProfileStore = defineStore('profiles', {
   persist:
