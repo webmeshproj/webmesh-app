@@ -157,7 +157,7 @@ export default defineComponent({
             });
           break;
         case null:
-          // We are switchign to connecting from disconnected
+          // We are switching to connecting from disconnected
           console.log('Connecting to profile', props.profile.id);
           connected.value = null;
           const connectRequest = new ConnectRequest(props.profile);
