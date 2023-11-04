@@ -3,7 +3,7 @@
     <q-list class="col-12">
       <q-item
         v-for="profile in profiles.profiles"
-        :key="profile.name"
+        :key="profile.id"
         class="q-pa-sm"
       >
         <connection-profile-view
@@ -66,7 +66,7 @@ export default defineComponent({
     const onEditProfile = (profile: ConnectionProfile) => {
       q.dialog({
         component: ConnectionProfileEditor,
-        componentProps: { profile },
+        componentProps: { current: profile },
       }).onOk((profile: ConnectionProfile) => {
         profiles.put(profile);
       });
@@ -75,7 +75,7 @@ export default defineComponent({
     const onDeleteProfile = (profile: ConnectionProfile) => {
       q.dialog({
         title: 'Delete Profile',
-        message: `Are you sure you want to delete the profile ${profile.name}?`,
+        message: `Are you sure you want to delete the profile ${profile.id}?`,
         cancel: true,
         persistent: true,
       }).onOk(() => {

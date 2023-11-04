@@ -4,22 +4,47 @@
       <q-card-section>
         <div class="text-h6">{{ title }}</div>
       </q-card-section>
-      <form
-        @submit.prevent.stop="onSubmit"
-        @reset.prevent.stop="onReset"
-        class="q-gutter-sm"
-      >
+      <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
         <q-card-section>
           <q-input
             dense
             ref="nameInputRef"
-            v-model="thisProfile.id"
+            v-model="profile.id"
             :clearable="isNewProfile"
             :disable="!isNewProfile"
             :rules="nameRules"
             placeholder="Profile Name"
-            hint="Enter a name for this profile"
           />
+        </q-card-section>
+        <q-card-section>
+          <q-list>
+            <q-expansion-item
+              dense
+              default-opened
+              group="toplevel"
+              icon="router"
+              label="Network"
+            >
+              <q-checkbox
+                v-model="profile.bootstrap.enabled"
+                label="Label on Right"
+              />
+            </q-expansion-item>
+            <q-expansion-item
+              dense
+              group="toplevel"
+              icon="verified_user"
+              label="Security"
+            >
+            </q-expansion-item>
+            <q-expansion-item
+              dense
+              group="toplevel"
+              icon="rss_feed"
+              label="Services"
+            >
+            </q-expansion-item>
+          </q-list>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn label="Save" color="positive" type="submit" size="sm" />
@@ -45,7 +70,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useDialogPluginComponent, QInput } from 'quasar';
-import { ConnectionProfile, useProfileStore } from '../stores/profiles';
+import {
+  ConnectionProfile,
+  ConnectionProfileSkeleton,
+  profileToSkeleton,
+  useProfileStore,
+} from '../stores/profiles';
 
 const NewConnectionTitle = 'New Connection Profile';
 const EditConnectionTitle = 'Edit Connection Profile';
@@ -56,7 +86,7 @@ export default defineComponent({
   name: 'ConnectionProfileEditor',
   components: {},
   props: {
-    profile: {
+    current: {
       type: Object as () => ConnectionProfile,
       required: false,
     },
@@ -66,11 +96,17 @@ export default defineComponent({
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
     const profiles = useProfileStore();
-    const isNewProfile = props.profile === undefined;
+    const isNewProfile = props.current === undefined;
     const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
-    const thisProfile = ref<ConnectionProfile>(
-      props.profile ?? ({} as ConnectionProfile)
+    const profile = ref<ConnectionProfileSkeleton>(
+      profileToSkeleton(props.current) ?? ({} as ConnectionProfileSkeleton)
     );
+    // Ensure empty structs are defined
+    if (!profile.value.bootstrap) {
+      profile.value.bootstrap = {
+        enabled: false,
+      };
+    }
 
     const nameInputRef = ref<QInput | null>(null);
     const nameRules = [
@@ -88,7 +124,8 @@ export default defineComponent({
     ] as Validator[];
 
     const onReset = () => {
-      thisProfile.value = props.profile ?? ({} as ConnectionProfile);
+      profile.value =
+        profileToSkeleton(props.current) ?? ({} as ConnectionProfileSkeleton);
     };
 
     const onSubmit = () => {
@@ -96,13 +133,13 @@ export default defineComponent({
       if (nameInputRef?.value?.hasError) {
         return;
       }
-      onDialogOK(thisProfile.value);
+      onDialogOK(profile.value);
     };
 
     return {
       title,
       isNewProfile,
-      thisProfile,
+      profile,
       profiles,
       dialogRef,
       nameInputRef,

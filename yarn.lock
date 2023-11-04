@@ -681,7 +681,7 @@
 
 "@webmesh/api@https://github.com/webmeshproj/api":
   version "1.0.0"
-  resolved "https://github.com/webmeshproj/api#74a3f895b7132f4c9e50892ef487951670c4c8bf"
+  resolved "https://github.com/webmeshproj/api#869d3a1f824f5717c6d7ba9c20051e7a5e2c1396"
   dependencies:
     "@bufbuild/protobuf" "^1.4.1"
     "@connectrpc/connect" "^1.1.3"
