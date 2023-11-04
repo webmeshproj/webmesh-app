@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <div class="row">
-      <q-header elevated class="bg-primary text-white">
+      <q-header style="max-height: 15%" elevated class="bg-primary text-white">
         <q-toolbar>
           <q-toolbar-title>
             <q-avatar>

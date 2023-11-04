@@ -13,14 +13,14 @@
         />
       </q-item>
     </q-list>
-    <q-footer class="q-pa-lg" :style="footerStyle">
+    <q-footer class="q-pa-sm" :style="footerStyle">
       <div class="column">
         <div class="col self-end">
           <q-btn
             round
             color="secondary"
             icon="add"
-            size="lg"
+            size="md"
             @click="onAddProfile"
           >
             <q-tooltip anchor="top left" self="top middle">
