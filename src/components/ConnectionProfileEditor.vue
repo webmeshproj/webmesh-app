@@ -90,8 +90,6 @@
                     @click="profile.tls.enabled = true"
                   />
                 </div>
-              </q-card-section>
-              <q-card-section>
                 <div class="q-mx-sm text-caption">TLS</div>
                 <div class="row q-pa-sm justify-start">
                   <q-checkbox
