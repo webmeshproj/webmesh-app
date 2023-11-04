@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
-import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
+import { ConnectRequest, NetworkAuthMethod } from '@webmesh/api/ts/v1/app_pb';
 
 export interface ConnectionProfile {
   name: string;
+  authMethod: NetworkAuthMethod;
 }
 
 export const useProfileStore = defineStore('profiles', {
@@ -23,6 +24,18 @@ export const useProfileStore = defineStore('profiles', {
     byName(state): (name: string) => ConnectionProfile | undefined {
       return (name: string) =>
         state.connectionProfiles.find((p) => p.name === name);
+    },
+    connectRequest(state): (profileName: string) => ConnectRequest {
+      return (profileName: string) => {
+        const p = state.connectionProfiles.find((p) => p.name === profileName);
+        if (p) {
+          const req = new ConnectRequest({
+            id: profileName,
+          });
+          return req;
+        }
+        throw new Error('Profile not found');
+      };
     },
   },
 
@@ -49,9 +62,6 @@ export const useProfileStore = defineStore('profiles', {
       if (profile) {
         this.delete(profile);
       }
-    },
-    newConnectRequest(/** profile: string */): ConnectRequest {
-      return new ConnectRequest();
     },
   },
 });

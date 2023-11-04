@@ -8,8 +8,8 @@
       >
         <connection-profile-view
           :profile="profile"
-          @on-edit="onEditProfileClick"
-          @on-delete="onDeleteProfileClick"
+          @edit="onEditProfile"
+          @delete="onDeleteProfile"
         />
       </q-item>
     </q-list>
@@ -21,7 +21,7 @@
             color="secondary"
             icon="add"
             size="lg"
-            @click="onAddProfileClick"
+            @click="onAddProfile"
           >
             <q-tooltip anchor="top left" self="top middle">
               <span style="font-size: small">Click to add a new profile</span>
@@ -55,7 +55,7 @@ export default defineComponent({
     const q = useQuasar();
     const profiles = useProfileStore();
 
-    const onAddProfileClick = () => {
+    const onAddProfile = () => {
       q.dialog({
         component: ConnectionProfileEditor,
       }).onOk((profile: ConnectionProfile) => {
@@ -63,7 +63,7 @@ export default defineComponent({
       });
     };
 
-    const onEditProfileClick = (profile: ConnectionProfile) => {
+    const onEditProfile = (profile: ConnectionProfile) => {
       q.dialog({
         component: ConnectionProfileEditor,
         componentProps: { profile },
@@ -72,7 +72,7 @@ export default defineComponent({
       });
     };
 
-    const onDeleteProfileClick = (profile: ConnectionProfile) => {
+    const onDeleteProfile = (profile: ConnectionProfile) => {
       q.dialog({
         title: 'Delete Profile',
         message: `Are you sure you want to delete the profile ${profile.name}?`,
@@ -85,9 +85,9 @@ export default defineComponent({
 
     return {
       profiles,
-      onAddProfileClick,
-      onEditProfileClick,
-      onDeleteProfileClick,
+      onAddProfile,
+      onEditProfile,
+      onDeleteProfile,
     };
   },
 });
