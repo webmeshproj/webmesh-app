@@ -7,7 +7,7 @@
           v-model="connected"
           :disable="connected === null"
           :icon="connectedIcon"
-          @click="onConnectSwitchClick"
+          @click="onClickConnectSwitch"
         />
       </q-item-section>
       <q-item-section>
@@ -55,10 +55,12 @@
 import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import {
+  ConnectRequest,
+  DisconnectRequest,
   ConnectionStatus,
   ConnectionStatus_Status,
 } from '@webmesh/api/ts/v1/app_pb';
-import { ConnectionProfile } from '../stores/profiles';
+import { ConnectionProfile, useProfileStore } from '../stores/profiles';
 import { useClientStore } from '../stores/client';
 
 export default defineComponent({
@@ -100,6 +102,7 @@ export default defineComponent({
   setup(props) {
     const q = useQuasar();
     const client = useClientStore();
+    const profiles = useProfileStore();
     const connected = ref<boolean | null>(false);
 
     const handleDaemonError = (err: Error) => {
@@ -134,16 +137,43 @@ export default defineComponent({
       });
     };
 
-    const onConnectSwitchClick = () => {
-      connected.value = false;
-      return;
+    const onClickConnectSwitch = () => {
+      switch (connected.value) {
+        case true:
+          const disconnectRequest = new DisconnectRequest({
+            id: props.profile.name,
+          });
+          client.daemon
+            .disconnect(disconnectRequest)
+            .then(() => {
+              connected.value = false;
+            })
+            .catch((err: Error) => {
+              handleDaemonError(err);
+            });
+          break;
+        case false:
+          const params = profiles.connectRequest(props.profile.name);
+          const connectRequest = new ConnectRequest(params);
+          client.daemon
+            .connect(connectRequest)
+            .then(() => {
+              connected.value = true;
+            })
+            .catch((err: Error) => {
+              handleDaemonError(err);
+            });
+          break;
+        case null:
+          break;
+      }
     };
 
     getConnectionStatus().then((status) => {
       connected.value = status;
     });
 
-    return { connected, onConnectSwitchClick };
+    return { connected, onClickConnectSwitch };
   },
 });
 </script>

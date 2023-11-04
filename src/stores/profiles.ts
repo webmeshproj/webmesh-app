@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
-import { ConnectRequest, NetworkAuthMethod } from '@webmesh/api/ts/v1/app_pb';
-
+import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
+import type { PartialMessage } from '@bufbuild/protobuf';
 export interface ConnectionProfile {
   name: string;
-  authMethod: NetworkAuthMethod;
+  params: PartialMessage<ConnectRequest>;
 }
 
 export const useProfileStore = defineStore('profiles', {
@@ -25,14 +25,13 @@ export const useProfileStore = defineStore('profiles', {
       return (name: string) =>
         state.connectionProfiles.find((p) => p.name === name);
     },
-    connectRequest(state): (profileName: string) => ConnectRequest {
+    connectRequest(
+      state
+    ): (profileName: string) => PartialMessage<ConnectRequest> {
       return (profileName: string) => {
         const p = state.connectionProfiles.find((p) => p.name === profileName);
         if (p) {
-          const req = new ConnectRequest({
-            id: profileName,
-          });
-          return req;
+          return p.params;
         }
         throw new Error('Profile not found');
       };
