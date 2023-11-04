@@ -7,7 +7,7 @@
           v-model="connected"
           :disable="connected === null"
           :icon="connectedIcon"
-          @click="onClickConnectSwitch"
+          @update:model-value="onClickConnectSwitch"
         />
       </q-item-section>
       <q-item-section>
@@ -137,22 +137,28 @@ export default defineComponent({
       });
     };
 
-    const onClickConnectSwitch = () => {
-      switch (connected.value) {
-        case true:
+    const onClickConnectSwitch = (newValue: boolean | null) => {
+      switch (newValue) {
+        case false:
+          // We are switching to disconnected from connected
+          console.log('Disconnecting from profile', props.profile.name);
+          connected.value = null;
           const disconnectRequest = new DisconnectRequest({
             id: props.profile.name,
           });
           client.daemon
             .disconnect(disconnectRequest)
-            .then(() => {
-              connected.value = false;
-            })
             .catch((err: Error) => {
               handleDaemonError(err);
+            })
+            .finally(() => {
+              connected.value = false;
             });
           break;
-        case false:
+        case null:
+          // We are switchign to connecting from disconnected
+          console.log('Connecting to profile', props.profile.name);
+          connected.value = null;
           const params = profiles.connectRequest(props.profile.name);
           const connectRequest = new ConnectRequest(params);
           client.daemon
@@ -162,9 +168,12 @@ export default defineComponent({
             })
             .catch((err: Error) => {
               handleDaemonError(err);
+              connected.value = false;
             });
           break;
-        case null:
+        case true:
+          // This should never happen
+          console.log('Switching connection status is disabled');
           break;
       }
     };
