@@ -17,7 +17,7 @@ volumes:
 
 services:
   daemon:
-    image: ghcr.io/webmeshproj/node:v0.15.10
+    image: ghcr.io/webmeshproj/node:v0.15.12
     networks:
       webmesh:
         ipv4_address: 10.1.0.2
@@ -26,6 +26,7 @@ services:
       - /webmesh-node
       - --daemon.enabled=true
       - --daemon.grpc-web=true
+      - --daemon.cors.enabled=true
       - --daemon.bind=[::]:58080
       - --daemon.ui.enabled=true
       - --daemon.ui.listen-address=[::]:8080
