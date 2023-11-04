@@ -1,13 +1,19 @@
 <template>
   <q-page class="q-pa-md row justify-start">
-    <connection-profile-view
-      v-for="profile in profiles.profiles"
-      :key="profile.name"
-      :profile="profile"
-      @on-edit="onEditProfileClick"
-      @on-delete="onDeleteProfileClick"
-    />
-    <q-footer class="q-pa-lg" style="background-color: white">
+    <q-list class="col-12">
+      <q-item
+        v-for="profile in profiles.profiles"
+        :key="profile.name"
+        class="q-pa-sm"
+      >
+        <connection-profile-view
+          :profile="profile"
+          @on-edit="onEditProfileClick"
+          @on-delete="onDeleteProfileClick"
+        />
+      </q-item>
+    </q-list>
+    <q-footer class="q-pa-lg" :style="footerStyle">
       <div class="column">
         <div class="col self-end">
           <q-btn
@@ -38,6 +44,13 @@ import ConnectionProfileView from '../components/ConnectionProfileView.vue';
 export default defineComponent({
   name: 'MainPage',
   components: { ConnectionProfileView },
+  computed: {
+    footerStyle(): string {
+      return this.$q.dark.isActive
+        ? 'background-color: #1d1d1d'
+        : 'background-color: lightgrey';
+    },
+  },
   setup() {
     const q = useQuasar();
     const profiles = useProfileStore();
