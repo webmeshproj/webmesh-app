@@ -37,12 +37,57 @@
                   new-value-mode="add-unique"
                   :disable="profile.bootstrap.enabled"
                 />
-                <q-checkbox
-                  dense
-                  v-model="profile.bootstrap.enabled"
-                  size="xs"
-                  label="Bootstrap network"
-                />
+                <div class="q-ma-sm text-caption">
+                  Bootstrap
+                  <div class="column q-pa-sm justify-start">
+                    <q-checkbox
+                      v-model="profile.bootstrap.enabled"
+                      size="xs"
+                      label="Enabled"
+                    />
+                    <div
+                      class="q-pa-sm text-caption"
+                      v-if="profile.bootstrap.enabled"
+                    >
+                      Network Settings
+                      <q-input
+                        dense
+                        v-model="profile.bootstrap.domain"
+                        :disable="!isNewProfile"
+                        hint="Domain name of the mesh network"
+                      />
+                      <q-input
+                        dense
+                        v-model="profile.bootstrap.ipv4Network"
+                        :disable="!isNewProfile"
+                        hint="IPv4 CIDR of the mesh network"
+                      />
+                      <q-checkbox
+                        v-model="profile.bootstrap.rbacEnabled"
+                        size="xs"
+                        label="Enable RBAC"
+                        :disable="!isNewProfile"
+                      />
+                      <div class="q-px-sm text-caption">
+                        Default Network Policy
+                      </div>
+                      <q-radio
+                        v-model="profile.bootstrap.defaultNetworkACL"
+                        :val="DefaultNetworkACL.ACCEPT"
+                        :disable="!isNewProfile"
+                        label="Accept"
+                        color="positive"
+                      />
+                      <q-radio
+                        v-model="profile.bootstrap.defaultNetworkACL"
+                        :val="DefaultNetworkACL.DROP"
+                        :disable="!isNewProfile"
+                        label="Drop"
+                        color="negative"
+                      />
+                    </div>
+                  </div>
+                </div>
               </q-card-section>
             </q-expansion-item>
 
@@ -431,6 +476,7 @@ import { useDialogPluginComponent, QInput, QFile } from 'quasar';
 import {
   NetworkAuthMethod,
   ConnectRequest_AuthHeader as AuthHeader,
+  MeshConnBootstrap_DefaultNetworkACL as DefaultNetworkACL,
 } from '@webmesh/api/ts/v1/app_pb';
 import { Feature } from '@webmesh/api/ts/v1/node_pb';
 import {
@@ -525,6 +571,7 @@ export default defineComponent({
     return {
       Feature,
       AuthHeader,
+      DefaultNetworkACL,
       NetworkAuthMethod,
       title,
       isNewProfile,

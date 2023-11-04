@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
-import { ConnectRequest, NetworkAuthMethod } from '@webmesh/api/ts/v1/app_pb';
+import {
+  ConnectRequest,
+  NetworkAuthMethod,
+  MeshConnBootstrap_DefaultNetworkACL as DefaultNetworkACL,
+} from '@webmesh/api/ts/v1/app_pb';
 import { Feature } from '@webmesh/api/ts/v1/node_pb';
 import type { PartialMessage } from '@bufbuild/protobuf';
 
@@ -20,7 +24,13 @@ export function newDefaultConnectionProfile(): ConnectionProfile {
     authMethod: NetworkAuthMethod.NO_AUTH,
     authCredentials: {},
     networking: {},
-    bootstrap: { enabled: false },
+    bootstrap: {
+      enabled: false,
+      domain: 'webmesh.internal',
+      ipv4Network: '172.16.0.0./12',
+      rbacEnabled: false,
+      defaultNetworkACL: DefaultNetworkACL.ACCEPT,
+    },
     tls: {
       enabled: false,
       skipVerify: false,
