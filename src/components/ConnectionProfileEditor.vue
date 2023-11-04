@@ -91,7 +91,13 @@
                   />
                 </div>
                 <div class="q-mx-sm text-caption">TLS</div>
-                <div class="row q-pa-sm justify-start">
+                <div
+                  :class="
+                    profile.tls.enabled
+                      ? 'row q-pa-sm justify-around'
+                      : 'row q-pa-sm justify-start'
+                  "
+                >
                   <q-checkbox
                     dense
                     v-model="profile.tls.enabled"
@@ -99,6 +105,53 @@
                     label="Enabled"
                     :disable="profile.authMethod === NetworkAuthMethod.MTLS"
                   />
+                  <q-checkbox
+                    dense
+                    v-model="profile.tls.skipVerify"
+                    size="xs"
+                    label="Skip Verify"
+                    @click="profile.tls.verifyChainOnly = false"
+                    v-if="profile.tls.enabled"
+                  />
+                  <q-checkbox
+                    dense
+                    v-model="profile.tls.verifyChainOnly"
+                    size="xs"
+                    label="Verify Chain Only"
+                    @click="profile.tls.skipVerify = false"
+                    v-if="profile.tls.enabled"
+                  />
+                </div>
+                <div
+                  class="col q-pa-sm justify-around"
+                  v-if="profile.tls.enabled"
+                >
+                  <q-input
+                    v-model="profile.tls.caCertData"
+                    dense
+                    label="TLS CA Certificate"
+                    hint="Base64 encoded PEM"
+                  ></q-input>
+                  <q-input
+                    v-model="profile.tls.certData"
+                    dense
+                    label="TLS Certificate"
+                    hint="Base64 encoded PEM"
+                    v-if="
+                      profile.authMethod === NetworkAuthMethod.MTLS ||
+                      profile.services.enabled
+                    "
+                  ></q-input>
+                  <q-input
+                    v-model="profile.tls.keyData"
+                    dense
+                    label="TLS Key"
+                    hint="Base64 encoded PEM"
+                    v-if="
+                      profile.authMethod === NetworkAuthMethod.MTLS ||
+                      profile.services.enabled
+                    "
+                  ></q-input>
                 </div>
               </q-card-section>
             </q-expansion-item>
@@ -150,7 +203,11 @@ function defaultConnectionProfile(): ConnectionProfile {
     authMethod: NetworkAuthMethod.NO_AUTH,
     networking: {},
     bootstrap: { enabled: false },
-    tls: { enabled: false },
+    tls: {
+      enabled: false,
+      skipVerify: false,
+      verifyChainOnly: false,
+    },
     services: { enabled: false },
   } as ConnectionProfile;
 }
