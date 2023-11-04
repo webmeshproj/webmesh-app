@@ -7,12 +7,13 @@
       <form
         @submit.prevent.stop="onSubmit"
         @reset.prevent.stop="onReset"
-        class="q-gutter-md"
+        class="q-gutter-sm"
       >
         <q-card-section>
           <q-input
+            dense
             ref="nameInputRef"
-            v-model="thisProfile.name"
+            v-model="thisProfile.id"
             :clearable="isNewProfile"
             :disable="!isNewProfile"
             :rules="nameRules"
@@ -21,19 +22,18 @@
           />
         </q-card-section>
         <q-card-actions align="right">
+          <q-btn label="Save" color="positive" type="submit" size="sm" />
           <q-btn
-            color="positive"
-            label="Save"
-            type="submit"
-            @click="onSubmit"
+            label="Cancel"
+            color="negative"
+            size="sm"
+            @click="onDialogCancel"
           />
-          <q-btn color="negative" label="Cancel" @click="onCancelClick" />
           <q-btn
             label="Reset"
-            type="reset"
             color="primary"
-            flat
-            class="q-ml-sm"
+            type="reset"
+            size="sm"
             v-if="isNewProfile"
           />
         </q-card-actions>
@@ -110,7 +110,7 @@ export default defineComponent({
       onSubmit,
       onReset,
       onDialogHide,
-      onCancelClick: onDialogCancel,
+      onDialogCancel,
     };
   },
 });

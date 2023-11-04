@@ -11,12 +11,14 @@
         />
       </q-item-section>
       <q-item-section>
-        <q-item-label>{{ profile.name }}</q-item-label>
+        <q-item-label>{{ profile.id }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-separator />
     <q-card-section horizontal class="justify-between">
-      <q-card-section class="col-10"> </q-card-section>
+      <q-card-section class="col-10">
+        <!-- Connection information will go here -->
+      </q-card-section>
       <q-separator vertical />
       <q-card-actions vertical class="col-2 justify-around">
         <q-btn
@@ -60,7 +62,7 @@ import {
   ConnectionStatus,
   ConnectionStatus_Status,
 } from '@webmesh/api/ts/v1/app_pb';
-import { ConnectionProfile, useProfileStore } from '../stores/profiles';
+import { ConnectionProfile } from '../stores/profiles';
 import { useClientStore } from '../stores/client';
 
 export default defineComponent({
@@ -102,7 +104,6 @@ export default defineComponent({
   setup(props) {
     const q = useQuasar();
     const client = useClientStore();
-    const profiles = useProfileStore();
     const connected = ref<boolean | null>(false);
 
     const handleDaemonError = (err: Error) => {
@@ -116,7 +117,7 @@ export default defineComponent({
     const getConnectionStatus = (): Promise<boolean | null> => {
       return new Promise((resolve) => {
         client
-          .status(props.profile.name)
+          .status(props.profile.id)
           .then((status: ConnectionStatus) => {
             switch (status.connectionStatus) {
               case ConnectionStatus_Status.DISCONNECTED:
@@ -141,10 +142,10 @@ export default defineComponent({
       switch (newValue) {
         case false:
           // We are switching to disconnected from connected
-          console.log('Disconnecting from profile', props.profile.name);
+          console.log('Disconnecting from profile', props.profile.id);
           connected.value = null;
           const disconnectRequest = new DisconnectRequest({
-            id: props.profile.name,
+            id: props.profile.id,
           });
           client.daemon
             .disconnect(disconnectRequest)
@@ -157,10 +158,9 @@ export default defineComponent({
           break;
         case null:
           // We are switchign to connecting from disconnected
-          console.log('Connecting to profile', props.profile.name);
+          console.log('Connecting to profile', props.profile.id);
           connected.value = null;
-          const params = profiles.connectRequest(props.profile.name);
-          const connectRequest = new ConnectRequest(params);
+          const connectRequest = new ConnectRequest(props.profile);
           client.daemon
             .connect(connectRequest)
             .then(() => {
