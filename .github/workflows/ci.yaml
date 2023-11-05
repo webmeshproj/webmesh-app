@@ -43,8 +43,6 @@ jobs:
         with:
           check-latest: true
           node-version-file: .nvmrc
-          cache: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || 'yarn' }}
-          cache-dependency-path: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || env.CACHE_DEP_PATH }}
 
       - name: Install Wine on Hosted Runners
         if: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
