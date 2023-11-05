@@ -185,6 +185,7 @@ module.exports = configure(function (/* ctx */) {
         linux: {
           icon: 'src-electron/icons/icon.png',
           category: 'Network',
+          publish: ['github'],
           target: [
             {
               target: 'AppImage',
@@ -194,7 +195,6 @@ module.exports = configure(function (/* ctx */) {
         },
         mac: {
           icon: 'src-electron/icons/icon.icns',
-          publish: 'never',
           category: 'public.app-category.networking',
           darkModeSupport: true,
           target: [
@@ -207,7 +207,6 @@ module.exports = configure(function (/* ctx */) {
         win: {
           publisherName: 'WebmeshProj',
           icon: 'src-electron/icons/icon.ico',
-          publish: 'never',
           target: [
             {
               target: 'nsis',

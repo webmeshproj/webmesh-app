@@ -8,6 +8,7 @@ on:
 
 env:
   WEBMESH_VERSION: main
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   build:
@@ -57,11 +58,10 @@ jobs:
 
       - name: Build Webmesh Helper Daemon
         if: ${{ matrix.target != 'linux' }}
-        env:
-          PARALLEL: 6
-        run: cd webmesh && make dist-webmeshd
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: latest
+          args: build --clean --id webmeshd
 
       - name: Build Electron App
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: yarn clean && yarn && yarn build:${{ matrix.target }}
+        run: yarn && yarn build:${{ matrix.target }}
