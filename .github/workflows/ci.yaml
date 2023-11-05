@@ -29,6 +29,12 @@ jobs:
           cache: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || 'yarn' }}
           cache-dependency-path: ${{ env.CACHE_DEP_PATH }}
 
+      - name: Install Wine
+        if: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
+        run: |
+          set -ex
+          sudo apt-get install -y wine
+
       - name: Build App
         run: |
           set -ex
