@@ -1,4 +1,4 @@
-name: Tests and Build
+name: Build
 on:
   push:
     branches: [main]
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    name: Build Artifacts
+    name: Build
     runs-on: ${{ vars.BUILD_PLATFORM == '' && 'ubuntu-latest' || vars.BUILD_PLATFORM }}
     permissions:
       contents: 'read'
@@ -29,7 +29,7 @@ jobs:
           cache: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || 'yarn' }}
           cache-dependency-path: ${{ env.CACHE_DEP_PATH }}
 
-      - name: Run Snapshot Release
+      - name: Build App
         run: |
           set -ex
           yarn
