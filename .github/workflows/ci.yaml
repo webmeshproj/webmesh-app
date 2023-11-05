@@ -8,6 +8,7 @@ on:
 
 env:
   WEBMESH_VERSION: main
+  WEBMESHD_BUILD_ARGS: --snapshot --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
 
 jobs:
@@ -62,7 +63,7 @@ jobs:
         with:
           version: latest
           workdir: webmesh
-          args: build --snapshot --clean --id webmeshd
+          args: build ${{ env.WEBMESHD_BUILD_ARGS }}
 
       - name: Build Electron App
         run: yarn && yarn build:${{ matrix.target }}
