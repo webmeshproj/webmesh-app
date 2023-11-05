@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/webmeshd \
+ExecStart=/usr/bin/webmesh-node \
     --daemon.enabled=true \
     --daemon.grpc-web=true \
     --daemon.cors.enabled=true \
