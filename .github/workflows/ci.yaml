@@ -37,6 +37,7 @@ jobs:
           go-version: stable
           check-latest: true
           cache: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
+          cache-dependency-path: webmesh/go.sum
 
       - name: Setup Node
         uses: actions/setup-node@v3
