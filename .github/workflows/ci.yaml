@@ -45,3 +45,26 @@ jobs:
           set -ex
           yarn
           yarn build:all
+
+      - name: Upload Linux Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-artifacts
+          path: dist/electron/Packaged/*.AppImage
+          retention-days: 3
+
+      - name: Upload Windows Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-artifacts
+          path: dist/electron/Packaged/*.exe
+          retention-days: 3
+
+      - name: Upload Darwin Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-artifacts
+          path: |
+            dist/electron/Packaged/mac/Webmesh.app
+            dist/electron/Packaged/mac-arm64/Webmesh.app
+          retention-days: 3
