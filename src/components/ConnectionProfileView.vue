@@ -13,48 +13,46 @@
       <q-item-section>
         <q-item-label>{{ profile.id }}</q-item-label>
       </q-item-section>
+      <q-item-section>
+        <div class="row justify-end">
+          <q-btn
+            flat
+            round
+            color="positive"
+            icon="edit"
+            @click="$emit('edit', profile)"
+          >
+            <q-tooltip anchor="bottom left" self="top middle">
+              <span style="font-size: small">Edit</span>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            color="info"
+            icon="file_download"
+            @click="$emit('export', profile)"
+          >
+            <q-tooltip anchor="bottom left" self="top middle">
+              <span style="font-size: small">Export</span>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            color="negative"
+            icon="delete"
+            @click="$emit('delete', profile)"
+          >
+            <q-tooltip anchor="bottom left" self="top middle">
+              <span style="font-size: small">Remove</span>
+            </q-tooltip>
+          </q-btn>
+        </div>
+      </q-item-section>
     </q-item>
     <q-separator />
-    <q-card-section horizontal class="justify-between">
-      <q-card-section class="col-10">
-        <!-- Connection information will go here -->
-      </q-card-section>
-      <q-separator vertical />
-      <q-card-actions vertical class="col-2 justify-around">
-        <q-btn
-          flat
-          round
-          color="positive"
-          icon="edit"
-          @click="$emit('edit', profile)"
-        >
-          <q-tooltip anchor="bottom left" self="top middle">
-            <span style="font-size: small">Edit</span>
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          flat
-          round
-          color="info"
-          icon="file_download"
-          @click="$emit('export', profile)"
-        >
-          <q-tooltip anchor="bottom left" self="top middle">
-            <span style="font-size: small">Export</span>
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          flat
-          round
-          color="negative"
-          icon="delete"
-          @click="$emit('delete', profile)"
-        >
-          <q-tooltip anchor="bottom left" self="top middle">
-            <span style="font-size: small">Remove</span>
-          </q-tooltip>
-        </q-btn>
-      </q-card-actions>
+    <q-card-section horizontal class="justify-start" v-if="connected">
     </q-card-section>
   </q-card>
 </template>
@@ -161,7 +159,7 @@ export default defineComponent({
           client.daemon
             .disconnect(disconnectRequest)
             .catch((err: Error) => {
-              handleDaemonError(err, 'Error disconnectiong from profile');
+              handleDaemonError(err, 'Error disconnecting from profile');
             })
             .finally(() => {
               connected.value = false;
