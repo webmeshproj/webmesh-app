@@ -27,7 +27,8 @@ if ($targetArch -eq "x64") {
 
 New-Item -Path build -Type Directory
 
-Move-Item -Force "dist\electron\Packaged\Webmesh-0.0.1-$targetArch.exe" "build\Webmesh.exe"
+Write-Output "$version" | Out-File -Force -FilePath "build\version.txt"
+Move-Item -Force "dist\electron\Packaged\Webmesh-$version-$targetArch.exe" "build\Webmesh.exe"
 Move-Item -Force "$daemonPath" "build\webmeshd.exe"
 Copy-Item -Force "src-electron/icons/icon.png" "build\Webmesh.ico"
 
