@@ -15,6 +15,7 @@ jobs:
     runs-on: ${{ vars.BUILD_PLATFORM == '' && 'ubuntu-latest' || vars.BUILD_PLATFORM }}
     permissions:
       contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
