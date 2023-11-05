@@ -10,7 +10,8 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev --mode electron",
-    "build": "quasar build --modern --mode electron",
+    "build": "rm -rf dist/ ; quasar build --modern --mode electron",
+    "build:all": "rm -rf dist/ ; quasar build --modern --mode electron --target all",
     "clean": "rm -rf dist/ node_modules/ && yarn"
   },
   "dependencies": {
