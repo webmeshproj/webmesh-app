@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\" >
+<plist version='1.0'>
+  <dict>
+    <key>Label</key><string>com.webmeshproj.webmeshd</string>
+    <key>Program</key><string>/Applications/Webmesh.app/Contents/MacOS/webmeshd</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Applications/Webmesh.app/Contents/MacOS/webmeshd</string>
+        <string>--daemon.enabled=true</string>
+        <string>--daemon.grpc-web=true</string>
+        <string>--daemon.cors.enabled=true</string>
+        <string>--daemon.bind=127.0.0.1:58080</string>
+        <string>--daemon.persistence.path=/Library/Webmesh</string>
+    </array>
+    <key>StandardErrorPath</key><string>/tmp/webmeshd.log</string>
+    <key>KeepAlive</key><true/>
+    <key>RunAtLoad</key><true/>
+    <key>Listeners</key>
+    <dict>
+        <key>SockServiceName</key>
+        <string>webmeshd</string>
+        <key>SockType</key>
+        <string>stream</string>
+        <key>SockFamily</key>
+        <string>IPv4</string>
+    </dict>
+  </dict>
+</plist>
