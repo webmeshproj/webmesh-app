@@ -182,6 +182,7 @@ module.exports = configure(function (/* ctx */) {
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
         // compression: 'maximum',
         copyright: 'Copyright © 2023 Avi Zimmerman',
+        asar: false,
         linux: {
           target: [
             {
