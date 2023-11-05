@@ -182,31 +182,32 @@ module.exports = configure(function (/* ctx */) {
         artifactName: '${productName}-${version}-${arch}.${ext}',
         copyright: 'Copyright © 2023 Avi Zimmerman',
         electronLanguages: ['en'],
-        publish: 'never',
         linux: {
+          icon: 'src-electron/icons/icon.png',
+          category: 'Network',
           target: [
             {
               target: 'AppImage',
               arch: ['arm64', 'x64'],
             },
           ],
-          icon: 'src-electron/icons/icon.png',
-          category: 'Network',
         },
         mac: {
+          icon: 'src-electron/icons/icon.icns',
+          publish: 'never',
           category: 'public.app-category.networking',
+          darkModeSupport: true,
           target: [
             {
               target: 'dir',
               arch: ['arm64', 'x64'],
             },
           ],
-          icon: 'src-electron/icons/icon.icns',
-          darkModeSupport: true,
         },
         win: {
           publisherName: 'WebmeshProj',
           icon: 'src-electron/icons/icon.ico',
+          publish: 'never',
           target: [
             {
               target: 'nsis',

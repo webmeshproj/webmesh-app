@@ -10,12 +10,12 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev --mode electron",
-    "build": "rm -rf dist/ ; quasar build --modern --mode electron",
+    "build": "quasar build --modern --mode electron",
     "build:win": "quasar build --modern --mode electron --target win",
-    "build:mac": "rm -rf dist/ ; quasar build --modern --mode electron --target mac",
+    "build:mac": "quasar build --modern --mode electron --target mac",
     "build:linux": "quasar build --modern --mode electron --target linux",
-    "build:all": "rm -rf dist/ ; quasar build --modern --mode electron --target all",
-    "clean": "rm -rf dist/ node_modules/ && yarn"
+    "build:all": "quasar build --modern --mode electron --target all",
+    "clean": "rm -rf dist/ node_modules/"
   },
   "dependencies": {},
   "devDependencies": {

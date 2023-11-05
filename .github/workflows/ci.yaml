@@ -13,6 +13,7 @@ jobs:
   build:
     name: Build Package
     strategy:
+      fail-fast: false
       matrix:
         target: [linux, mac, win]
         include:
@@ -63,4 +64,4 @@ jobs:
       - name: Build Electron App
         env:
           GH_TOKEN: ${{ github.token }}
-        run: yarn && yarn build:${{ matrix.target }}
+        run: yarn clean && yarn && yarn build:${{ matrix.target }}
