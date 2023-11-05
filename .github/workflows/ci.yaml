@@ -44,21 +44,22 @@ jobs:
           check-latest: true
           node-version-file: .nvmrc
 
-      - name: Install Wine on Hosted Runners
-        if: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
+      - name: Install Wine on Hosted Ubuntu Runners
+        if: ${{ startswith(vars.BUILD_PLATFORM, 'ubuntu') }}
         run: |
           set -ex
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y wine64 wine32
 
+      - name: Install UPX on Hosted macOS Runners
+        if: ${{ startswith(vars.BUILD_PLATFORM, 'macos') }}
+        run: brew install upx
+
       - name: Build Webmesh Daemon
         run: cd webmesh && make dist-webmeshd
 
-      - name: Build App
+      - name: Build Electron App
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          set -ex
-          yarn
-          yarn build:all
+        run: yarn && yarn build:all
