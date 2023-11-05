@@ -180,7 +180,6 @@ module.exports = configure(function (/* ctx */) {
         appId: 'com.webmeshproj.app',
         productName: 'Webmesh',
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
-        // compression: 'maximum',
         copyright: 'Copyright © 2023 Avi Zimmerman',
         electronLanguages: ['en'],
         linux: {
@@ -197,7 +196,7 @@ module.exports = configure(function (/* ctx */) {
           category: 'public.app-category.networking',
           target: [
             {
-              target: 'pkg',
+              target: 'dir',
               arch: ['arm64', 'x64'],
             },
           ],
