@@ -62,7 +62,7 @@ jobs:
         with:
           version: latest
           workdir: webmesh
-          args: build --clean --id webmeshd
+          args: build --snapshot --clean --id webmeshd
 
       - name: Build Electron App
         run: yarn && yarn build:${{ matrix.target }}
