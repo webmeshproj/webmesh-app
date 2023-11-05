@@ -173,6 +173,8 @@ module.exports = configure(function (/* ctx */) {
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+        prune: true,
+        derefSymlinks: false,
         arch: ['x64', 'arm64'],
         platform: ['darwin', 'win32', 'linux'],
         appBundleId: 'com.webmeshproj.app',
@@ -191,7 +193,7 @@ module.exports = configure(function (/* ctx */) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-        appId: 'webmesh-app',
+        appId: 'com.webmeshproj.app',
       },
     },
 
