@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 env:
+  WEBMESH_VERSION: main
   CACHE_DEP_PATH: yarn.lock
 
 jobs:
@@ -21,6 +22,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Checkout Webmesh
+        uses: actions/checkout@v4
+        with:
+          repository: webmeshproj/webmesh
+          ref: ${{ env.WEBMESH_VERSION }}
+          path: webmesh
+          fetch-tags: true
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+          check-latest: true
+          cache: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -38,6 +54,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wine64 wine32
 
+      - name: Build Webmesh Daemon
+        run: cd webmesh && make dist-webmeshd
+
       - name: Build App
         env:
           GH_TOKEN: ${{ github.token }}
@@ -45,26 +64,3 @@ jobs:
           set -ex
           yarn
           yarn build:all
-
-      - name: Upload Linux Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: linux-artifacts
-          path: dist/electron/Packaged/*.AppImage
-          retention-days: 3
-
-      - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: windows-artifacts
-          path: dist/electron/Packaged/Webmesh-*-*.exe
-          retention-days: 3
-
-      - name: Upload macOS Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: macos-artifacts
-          path: |
-            dist/electron/Packaged/mac/Webmesh.app
-            dist/electron/Packaged/mac-arm64/Webmesh.app
-          retention-days: 3
