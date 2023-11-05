@@ -8,12 +8,21 @@ on:
 
 env:
   WEBMESH_VERSION: main
-  CACHE_DEP_PATH: yarn.lock
 
 jobs:
   build:
-    name: Build
-    runs-on: ${{ vars.BUILD_PLATFORM == '' && 'ubuntu-latest' || vars.BUILD_PLATFORM }}
+    name: Build Package
+    strategy:
+      matrix:
+        target: [linux, mac, win]
+        include:
+          - target: linux
+            runner: ${{ vars.LINUX_BUILD_PLATFORM }}
+          - target: mac
+            runner: ${{ vars.MACOS_BUILD_PLATFORM }}
+          - target: win
+            runner: ${{ vars.WINDOWS_BUILD_PLATFORM }}
+    runs-on: ${{ matrix.runner }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -36,7 +45,7 @@ jobs:
         with:
           go-version: stable
           check-latest: true
-          cache: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
+          cache: ${{ !startswith(matrix.runner, 'self-hosted') }}
           cache-dependency-path: webmesh/go.sum
 
       - name: Setup Node
@@ -45,19 +54,8 @@ jobs:
           check-latest: true
           node-version-file: .nvmrc
 
-      - name: Install Wine on Hosted Ubuntu Runners
-        if: ${{ startswith(vars.BUILD_PLATFORM, 'ubuntu') }}
-        run: |
-          set -ex
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y wine64 wine32
-
-      - name: Install UPX on Hosted macOS Runners
-        if: ${{ startswith(vars.BUILD_PLATFORM, 'macos') }}
-        run: brew install upx
-
-      - name: Build Webmesh Daemon
+      - name: Build Webmesh Helper Daemon
+        if: ${{ matrix.target != 'linux' }}
         env:
           PARALLEL: 6
         run: cd webmesh && make dist-webmeshd
@@ -65,4 +63,4 @@ jobs:
       - name: Build Electron App
         env:
           GH_TOKEN: ${{ github.token }}
-        run: yarn && yarn build:all
+        run: yarn && yarn build:${{ matrix.target }}
