@@ -1,0 +1,36 @@
+name: Tests and Build
+on:
+  push:
+    branches: [main]
+    tags: [v*]
+  pull_request:
+    branches: [main]
+
+env:
+  CACHE_DEP_PATH: yarn.lock
+
+jobs:
+  build:
+    name: Build Artifacts
+    runs-on: ${{ vars.BUILD_PLATFORM == '' && 'ubuntu-latest' || vars.BUILD_PLATFORM }}
+    permissions:
+      contents: 'read'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build App
+        uses: actions/setup-node@v3
+        with:
+          check-latest: true
+          node-version-file: .nvmrc
+          cache: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || 'yarn' }}
+          cache-dependency-path: ${{ env.CACHE_DEP_PATH }}
+
+      - name: Run Snapshot Release
+        run: |
+          set -ex
+          yarn
+          yarn build:all
