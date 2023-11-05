@@ -10,11 +10,6 @@ if ($version -eq "") {
     $version = "0.0.1"
 }
 
-$targetArch=$env:TARGET_ARCH
-if ($targetArch -eq "") {
-    $targetArch = "x64"
-}
-
 $daemonRoot=$env:DAEMON_ROOT
 if ($daemonRoot -eq "") {
     $daemonRoot = "webmesh\dist"
