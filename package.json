@@ -11,9 +11,9 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev --mode electron",
     "build": "rm -rf dist/ ; quasar build --modern --mode electron",
-    "build:win": "rm -rf dist/ ; quasar build --modern --mode electron --target win",
+    "build:win": "quasar build --modern --mode electron --target win",
     "build:mac": "rm -rf dist/ ; quasar build --modern --mode electron --target mac",
-    "build:linux": "rm -rf dist/ ; quasar build --modern --mode electron --target linux",
+    "build:linux": "quasar build --modern --mode electron --target linux",
     "build:all": "rm -rf dist/ ; quasar build --modern --mode electron --target all",
     "clean": "rm -rf dist/ node_modules/ && yarn"
   },

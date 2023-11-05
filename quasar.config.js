@@ -182,6 +182,7 @@ module.exports = configure(function (/* ctx */) {
         artifactName: '${productName}-${version}-${arch}.${ext}',
         copyright: 'Copyright © 2023 Avi Zimmerman',
         electronLanguages: ['en'],
+        publish: 'never',
         linux: {
           target: [
             {
@@ -203,7 +204,6 @@ module.exports = configure(function (/* ctx */) {
           icon: 'src-electron/icons/icon.icns',
           darkModeSupport: true,
         },
-        pkg: {},
         win: {
           publisherName: 'WebmeshProj',
           icon: 'src-electron/icons/icon.ico',
