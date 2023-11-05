@@ -6,7 +6,7 @@
       <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package"/>
       <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
 
-      <Icon Id="ProductIcon" SourceFile="icon.ico"/>
+      <Icon Id="ProductIcon" SourceFile="Webmesh.ico"/>
       <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
       <Property Id="ARPHELPLINK" Value="https://webmeshproj.github.io"/>
       <Property Id="ARPURLINFOABOUT" Value="https://webmeshproj.github.io"/>
