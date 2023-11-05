@@ -169,31 +169,51 @@ module.exports = configure(function (/* ctx */) {
 
       inspectPort: 5858,
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder',
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-        prune: true,
-        derefSymlinks: false,
-        arch: ['x64', 'arm64'],
-        platform: ['darwin', 'win32', 'linux'],
-        appBundleId: 'com.webmeshproj.app',
-        appCopyright: '2023 Avi Zimmerman',
-        appCategoryType: 'public.app-category.networking',
-        darwinDarkModeSupport: true,
-        win32metadata: {
-          CompanyName: 'WebmeshProj',
-          FileDescription: 'Webmesh',
-          OriginalFilename: 'Webmesh',
-          ProductName: 'Webmesh',
-          InternalName: 'Webmesh',
-          'requested-execution-level': 'asInvoker',
-        },
       },
 
       builder: {
         // https://www.electron.build/configuration/configuration
         appId: 'com.webmeshproj.app',
+        productName: 'Webmesh',
+        artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
+        // compression: 'maximum',
+        copyright: 'Copyright © 2023 Avi Zimmerman',
+        linux: {
+          target: [
+            {
+              target: 'AppImage',
+              arch: ['arm64', 'x64'],
+            },
+          ],
+          icon: 'src-electron/icons/icon.png',
+          category: 'Network',
+        },
+        mac: {
+          category: 'public.app-category.networking',
+          target: [
+            {
+              target: 'pkg',
+              arch: ['arm64', 'x64'],
+            },
+          ],
+          icon: 'src-electron/icons/icon.icns',
+          darkModeSupport: true,
+        },
+        pkg: {},
+        win: {
+          publisherName: 'WebmeshProj',
+          icon: 'src-electron/icons/icon.ico',
+          target: [
+            {
+              target: 'nsis',
+              arch: ['arm64', 'x64'],
+            },
+          ],
+        },
       },
     },
 
