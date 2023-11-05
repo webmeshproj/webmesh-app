@@ -20,7 +20,7 @@
             round
             color="positive"
             icon="edit"
-            :disable="connected === true"
+            :disable="connected === null || connected === true"
             @click="$emit('edit', profile)"
           >
             <q-tooltip anchor="bottom left" self="top middle">
