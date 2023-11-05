@@ -56,14 +56,14 @@ jobs:
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: linux-artifacts
-          path: dist/electron/Packaged/*.exe
+          name: windows-artifacts
+          path: dist/electron/Packaged/Webmesh-*-*.exe
           retention-days: 3
 
-      - name: Upload Darwin Artifacts
+      - name: Upload macOS Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: linux-artifacts
+          name: macos-artifacts
           path: |
             dist/electron/Packaged/mac/Webmesh.app
             dist/electron/Packaged/mac-arm64/Webmesh.app
