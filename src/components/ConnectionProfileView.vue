@@ -28,8 +28,19 @@
           icon="edit"
           @click="$emit('edit', profile)"
         >
-          <q-tooltip anchor="bottom right" self="top middle">
-            <span style="font-size: small">Edit Profile</span>
+          <q-tooltip anchor="bottom left" self="top middle">
+            <span style="font-size: small">Edit</span>
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          flat
+          round
+          color="info"
+          icon="file_download"
+          @click="$emit('export', profile)"
+        >
+          <q-tooltip anchor="bottom left" self="top middle">
+            <span style="font-size: small">Export</span>
           </q-tooltip>
         </q-btn>
         <q-btn
@@ -39,8 +50,8 @@
           icon="delete"
           @click="$emit('delete', profile)"
         >
-          <q-tooltip anchor="bottom right" self="top middle">
-            <span style="font-size: small">Remove Profile</span>
+          <q-tooltip anchor="bottom left" self="top middle">
+            <span style="font-size: small">Remove</span>
           </q-tooltip>
         </q-btn>
       </q-card-actions>
@@ -68,7 +79,7 @@ import { useClientStore } from '../stores/client';
 export default defineComponent({
   name: 'ConnectionProfileView',
   components: {},
-  emits: ['edit', 'delete'],
+  emits: ['edit', 'delete', 'export'],
   props: {
     profile: {
       type: Object as () => ConnectionProfile,
@@ -106,11 +117,11 @@ export default defineComponent({
     const client = useClientStore();
     const connected = ref<boolean | null>(false);
 
-    const handleDaemonError = (err: Error) => {
+    const handleDaemonError = (err: Error, msg: string) => {
       console.log('Error communicating with daemon', err);
       q.notify({
         type: 'negative',
-        message: 'Error communicating with daemon',
+        message: msg,
       });
     };
 
@@ -132,7 +143,7 @@ export default defineComponent({
             }
           })
           .catch((err: Error) => {
-            handleDaemonError(err);
+            handleDaemonError(err, 'Error communicating with daemon');
             resolve(false);
           });
       });
@@ -150,7 +161,7 @@ export default defineComponent({
           client.daemon
             .disconnect(disconnectRequest)
             .catch((err: Error) => {
-              handleDaemonError(err);
+              handleDaemonError(err, 'Error disconnectiong from profile');
             })
             .finally(() => {
               connected.value = false;
@@ -167,7 +178,7 @@ export default defineComponent({
               connected.value = true;
             })
             .catch((err: Error) => {
-              handleDaemonError(err);
+              handleDaemonError(err, 'Error connecting to profile');
               connected.value = false;
             });
           break;

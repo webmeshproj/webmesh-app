@@ -37,6 +37,19 @@ export const useClientStore = defineStore('client', {
     peers(): (profile: string) => MeshNodes {
       return (profile) => new MeshNodes(this.daemon, profile);
     },
+    drop(): (profile: string) => Promise<void> {
+      return (profile) => {
+        if (!profile) {
+          return Promise.reject(new Error('No profile specified'));
+        }
+        return new Promise((resolve, reject) => {
+          this.daemon
+            .drop({ id: profile })
+            .then(() => resolve())
+            .catch((err: Error) => reject(err));
+        });
+      };
+    },
     status(): (profile: string | undefined) => Promise<ConnectionStatus> {
       return (profile) => {
         if (!profile) {

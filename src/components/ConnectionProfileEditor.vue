@@ -463,7 +463,7 @@
     </q-card>
     <q-file
       ref="filePickerRef"
-      hidden
+      style="display: none"
       :model-value="undefined"
       @update:model-value="onPickedTLSFile"
     ></q-file>

@@ -17,7 +17,7 @@ volumes:
 
 services:
   daemon:
-    image: ghcr.io/webmeshproj/node:v0.15.12
+    image: ghcr.io/webmeshproj/node:latest
     networks:
       webmesh:
         ipv4_address: 10.1.0.2
