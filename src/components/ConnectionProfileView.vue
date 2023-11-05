@@ -20,6 +20,7 @@
             round
             color="positive"
             icon="edit"
+            :disable="connected === true"
             @click="$emit('edit', profile)"
           >
             <q-tooltip anchor="bottom left" self="top middle">
@@ -42,6 +43,7 @@
             round
             color="negative"
             icon="delete"
+            :disable="connected === true"
             @click="$emit('delete', profile)"
           >
             <q-tooltip anchor="bottom left" self="top middle">

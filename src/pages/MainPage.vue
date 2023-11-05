@@ -1,6 +1,23 @@
 <template>
   <q-page class="q-pa-md row justify-start">
     <q-list class="col-12">
+      <q-item v-if="profiles.profiles.length === 0">
+        <q-item-section>
+          <div class="column items-center justify-evenly">
+            <div class="text-h6">
+              You don't have any profiles configured
+              <q-icon name="sentiment_very_dissatisfied" />
+            </div>
+            <div class="text-subtitle">
+              Click the
+              <q-icon name="add" />
+              or
+              <q-icon name="import_export" />
+              button below to get started
+            </div>
+          </div>
+        </q-item-section>
+      </q-item>
       <q-item
         v-for="profile in profiles.profiles"
         :key="profile.id"
