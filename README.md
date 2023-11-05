@@ -6,14 +6,12 @@ An application for connecting to Webmesh networks
 
 ```bash
 yarn
-# or
-npm install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
 ```bash
-quasar dev
+yarn dev
 ```
 
 ### Start a local daemon process
@@ -29,22 +27,18 @@ The daemon listens for app requests on localhost:58080.
 
 ```bash
 yarn lint
-# or
-npm run lint
 ```
 
 ### Format the files
 
 ```bash
 yarn format
-# or
-npm run format
 ```
 
 ### Build the app for production
 
 ```bash
-quasar build
+yarn build
 ```
 
 ### Customize the configuration
