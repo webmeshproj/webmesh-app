@@ -37,6 +37,7 @@
                   new-value-mode="add-unique"
                   :disable="profile.bootstrap.enabled"
                 />
+
                 <!-- Bootstrap Settings -->
                 <div class="q-ma-sm text-caption">
                   Bootstrap
@@ -378,6 +379,7 @@
                     ]"
                   />
                 </div>
+
                 <div v-if="profile.services.enabled">
                   <!-- Membership -->
                   <div class="text-caption">Membership</div>
@@ -435,6 +437,7 @@
                       "
                     />
                   </div>
+
                   <!-- APIs -->
                   <div class="q-pa-sm text-caption">APIs</div>
                   <div class="q-px-sm q-gutter-sm">
@@ -488,6 +491,7 @@
             </q-expansion-item>
           </q-list>
         </q-card-section>
+
         <!-- Actions -->
         <q-card-actions align="right">
           <q-btn label="Save" color="positive" type="submit" size="sm" />

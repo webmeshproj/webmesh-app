@@ -173,13 +173,20 @@ module.exports = configure(function (/* ctx */) {
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-        // Windows only
-        // win32metadata: { ... }
+        arch: ['x64', 'arm64'],
+        platform: ['darwin', 'win32', 'linux'],
+        appBundleId: 'com.webmeshproj.app',
+        appCopyright: '2023 Avi Zimmerman',
+        appCategoryType: 'public.app-category.networking',
+        darwinDarkModeSupport: true,
+        win32metadata: {
+          CompanyName: 'WebmeshProj',
+          FileDescription: 'Webmesh',
+          OriginalFilename: 'Webmesh',
+          ProductName: 'Webmesh',
+          InternalName: 'Webmesh',
+          'requested-execution-level': 'asInvoker',
+        },
       },
 
       builder: {
