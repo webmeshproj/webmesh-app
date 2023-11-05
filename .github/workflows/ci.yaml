@@ -61,6 +61,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           version: latest
+          workdir: webmesh
           args: build --clean --id webmeshd
 
       - name: Build Electron App
