@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build App
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           check-latest: true
@@ -30,7 +30,7 @@ jobs:
           cache: ${{ startswith(vars.BUILD_PLATFORM, 'self-hosted') && '' || 'yarn' }}
           cache-dependency-path: ${{ env.CACHE_DEP_PATH }}
 
-      - name: Install Wine
+      - name: Install Wine on Hosted Runners
         if: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
         run: |
           set -ex
