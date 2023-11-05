@@ -38,6 +38,8 @@ jobs:
           sudo apt-get install -y wine64 wine32
 
       - name: Build App
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -ex
           yarn
