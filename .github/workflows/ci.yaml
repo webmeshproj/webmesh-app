@@ -33,7 +33,9 @@ jobs:
         if: ${{ !startswith(vars.BUILD_PLATFORM, 'self-hosted') }}
         run: |
           set -ex
-          sudo apt-get install -y wine
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine64 wine32
 
       - name: Build App
         run: |
