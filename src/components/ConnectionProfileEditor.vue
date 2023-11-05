@@ -37,6 +37,7 @@
                   new-value-mode="add-unique"
                   :disable="profile.bootstrap.enabled"
                 />
+                <!-- Bootstrap Settings -->
                 <div class="q-ma-sm text-caption">
                   Bootstrap
                   <div class="column q-pa-sm justify-start">
@@ -44,22 +45,36 @@
                       v-model="profile.bootstrap.enabled"
                       size="xs"
                       label="Enabled"
+                      @update:model-value="
+                        () => {
+                          profile.services.enabled = true;
+                          if (
+                            !profile.services.features.includes(
+                              Feature.MEMBERSHIP
+                            )
+                          ) {
+                            profile.services.features.push(Feature.MEMBERSHIP);
+                          }
+                        }
+                      "
                     />
                     <div
                       class="q-pa-sm text-caption"
                       v-if="profile.bootstrap.enabled"
                     >
-                      Network Settings
+                      Mesh Settings
                       <q-input
                         dense
                         v-model="profile.bootstrap.domain"
                         :disable="!isNewProfile"
+                        :placeholder="DefaultMeshDomain"
                         hint="Domain name of the mesh network"
                       />
                       <q-input
                         dense
                         v-model="profile.bootstrap.ipv4Network"
                         :disable="!isNewProfile"
+                        :placeholder="DefaultMeshIPv4Network"
                         hint="IPv4 CIDR of the mesh network"
                       />
                       <q-checkbox
@@ -337,20 +352,50 @@
                     v-model="profile.services.enabled"
                     size="xs"
                     label="Enabled"
-                  />
+                    :disable="profile.bootstrap.enabled"
+                  >
+                    <q-tooltip
+                      anchor="bottom middle"
+                      self="top middle"
+                      v-if="profile.bootstrap.enabled"
+                    >
+                      <span style="font-size: small">
+                        Cannot disable services when bootstrap is enabled
+                      </span>
+                    </q-tooltip>
+                  </q-checkbox>
                   <q-input
                     v-model="profile.services.listenAddress"
                     label="Listen Address"
                     v-if="profile.services.enabled"
+                    :rules="[
+                      (value: string) => {
+                        return (
+                          (value && value.length > 0) ||
+                          'Listen address is required'
+                        );
+                      },
+                    ]"
                   />
                 </div>
                 <div v-if="profile.services.enabled">
                   <!-- Membership -->
-                  <div class="q-pa-sm text-caption">Membership</div>
+                  <div class="text-caption">Membership</div>
                   <div class="q-px-sm q-gutter-sm">
+                    <q-tooltip
+                      anchor="bottom middle"
+                      self="top middle"
+                      v-if="profile.bootstrap.enabled"
+                    >
+                      <span style="font-size: small">
+                        Cannot change membership settings when bootstrap is
+                        enabled
+                      </span>
+                    </q-tooltip>
                     <q-checkbox
                       dense
                       v-model="profile.services.features"
+                      :disable="profile.bootstrap.enabled"
                       :val="Feature.MEMBERSHIP"
                       label="Voter"
                       @click="
@@ -371,6 +416,7 @@
                     <q-checkbox
                       dense
                       v-model="profile.services.features"
+                      :disable="profile.bootstrap.enabled"
                       :val="Feature.STORAGE_QUERIER"
                       label="Observer"
                       @click="
@@ -481,6 +527,8 @@ import {
 import { Feature } from '@webmesh/api/ts/v1/node_pb';
 import {
   ConnectionProfile,
+  DefaultMeshDomain,
+  DefaultMeshIPv4Network,
   newDefaultConnectionProfile,
   useProfileStore,
 } from '../stores/profiles';
@@ -520,8 +568,8 @@ export default defineComponent({
     const caCertRef = ref<QInput | null>(null);
     const tlsCertRef = ref<QInput | null>(null);
     const tlsKeyRef = ref<QInput | null>(null);
-    const filePickerRef = ref<QFile | null>(null);
     const filePickerTarget = ref<QInput | null>(null);
+    const filePickerRef = ref<QFile | null>(null);
     const pickTLSFile = () => {
       filePickerRef.value?.pickFiles();
     };
@@ -572,6 +620,8 @@ export default defineComponent({
       Feature,
       AuthHeader,
       DefaultNetworkACL,
+      DefaultMeshDomain,
+      DefaultMeshIPv4Network,
       NetworkAuthMethod,
       title,
       isNewProfile,

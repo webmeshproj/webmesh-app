@@ -8,7 +8,7 @@ import {
 import { Feature } from '@webmesh/api/ts/v1/node_pb';
 import type { PartialMessage } from '@bufbuild/protobuf';
 
-type RecursiveRequired<T> = Required<{
+export type RecursiveRequired<T> = Required<{
   [P in keyof T]: T[P] extends object | undefined
     ? RecursiveRequired<Required<T[P]>>
     : T[P];
@@ -18,18 +18,26 @@ export type ConnectionProfile = RecursiveRequired<
   PartialMessage<ConnectRequest>
 >;
 
+export const DefaultAuthMethod = NetworkAuthMethod.NO_AUTH;
+export const DefaultMeshDomain = 'webmesh.internal';
+export const DefaultMeshIPv4Network = '172.16.0.0/12';
+export const DefaultNetworkACLPolicy = DefaultNetworkACL.ACCEPT;
+export const DefaultListenAddress = '[::]:8443';
+export const DefaultDNSListenUDP = '[::]:53';
+export const DefaultDNSListenTCP = '[::]:53';
+
 export function newDefaultConnectionProfile(): ConnectionProfile {
   return {
     id: '',
-    authMethod: NetworkAuthMethod.NO_AUTH,
+    authMethod: DefaultAuthMethod,
     authCredentials: {},
     networking: {},
     bootstrap: {
       enabled: false,
-      domain: 'webmesh.internal',
-      ipv4Network: '172.16.0.0./12',
+      domain: DefaultMeshDomain,
+      ipv4Network: DefaultMeshIPv4Network,
       rbacEnabled: false,
-      defaultNetworkACL: DefaultNetworkACL.ACCEPT,
+      defaultNetworkACL: DefaultNetworkACLPolicy,
     },
     tls: {
       enabled: false,
@@ -38,12 +46,12 @@ export function newDefaultConnectionProfile(): ConnectionProfile {
     },
     services: {
       enabled: false,
-      listenAddress: '[::]:8443',
+      listenAddress: DefaultListenAddress,
       features: [] as Feature[],
       dns: {
         enabled: false,
-        listenUDP: '[::]:53',
-        listenTCP: '[::]:53',
+        listenUDP: DefaultDNSListenUDP,
+        listenTCP: DefaultDNSListenTCP,
       },
     },
   } as ConnectionProfile;
