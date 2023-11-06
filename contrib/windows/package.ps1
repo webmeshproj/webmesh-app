@@ -34,9 +34,6 @@ Write-Output "$VERSION" | Out-File -Force -FilePath "build\arm64\version.txt"
 Copy-Item "LICENSE" "build\x64\LICENSE.txt"
 Copy-Item "LICENSE" "build\arm64\LICENSE.txt"
 
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION.exe" "build\x64\Webmesh.exe"
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION.exe" "build\arm64\Webmesh.exe"
-
 Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" "build\x64\Webmesh.exe"
 Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" "build\arm64\Webmesh.exe"
 
