@@ -21,7 +21,6 @@
       <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
 
       <Directory Id="TARGETDIR" Name="SourceDir">
-
         <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
             <Directory Id="INSTALLDIR" Name="Webmesh">
                <Component Id="ApplicationFiles" Guid="C1B980AF-8880-4CD2-91E9-D34618CB5978">
@@ -40,14 +39,12 @@
                     Account="LocalSystem"
                     ErrorControl="normal"
                     Interactive="no"
-                    Arguments='--daemon.enabled=true --daemon.grpc-web=true --daemon.cors.enabled=true --daemon.bind=127.0.0.1:58080 --daemon.persistence.path="C:\ProgramData\Webmesh"'
                   />
                   <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="WebmeshDaemon" Wait="no" />
                   <ServiceConfig ServiceName="WebmeshDaemon" OnInstall="yes" DelayedAutoStart="yes"/>
                </Component>
             </Directory>
          </Directory>
-
          <Directory Id="ProgramMenuFolder">
             <Directory Id="ProgramMenuSubfolder" Name="Webmesh">
                <Component Id="ApplicationShortcuts" Guid="33029A14-1EBB-4DF4-8E8B-0C8CED52C8FE">
@@ -59,7 +56,6 @@
                </Component>
             </Directory>
          </Directory>
-
       </Directory>
 
       <InstallExecuteSequence>
