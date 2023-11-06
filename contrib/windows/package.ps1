@@ -1,6 +1,7 @@
 #!powershell
 
 # This script is used to build the Windows installer.
+# It is intended for use from CI, but can be used locally by setting the DAEMONROOT environment variable.
 
 Set-PSDebug -Trace 1
 $ErrorActionPreference = "Stop"

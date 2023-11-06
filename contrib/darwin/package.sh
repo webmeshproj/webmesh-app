@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 # This script is used to build the macOS installer.
+# It is intended for use from CI, but can be used locally by setting
+# the DAEMONROOT environment variable to a repository path where the
+# webmeshd binary can be found.
 
 rm -rf build
 mkdir -p build
