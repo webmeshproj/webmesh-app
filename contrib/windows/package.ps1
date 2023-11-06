@@ -41,11 +41,11 @@ Copy-Item -Force "src-electron/icons/icon.png" "build\x64\Webmesh.ico"
 Copy-Item -Force "src-electron/icons/icon.png" "build\arm64\Webmesh.ico"
 
 Push-Location build\x64
-candle "contrib\windows\webmesh.wxs"
+candle "..\..\contrib\windows\webmesh.wxs"
 light -o "webmesh-x64-$version.msi" "webmesh.wixobj"
 Pop-Location
 
 Push-Location build\arm64
-candle "contrib\windows\webmesh.wxs"
+candle "..\..\contrib\windows\webmesh.wxs"
 light -o "webmesh-arm64-$version.msi" "webmesh.wixobj"
 Pop-Location
