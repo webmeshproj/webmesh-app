@@ -11,12 +11,12 @@ Set-PSDebug -Trace 1
 $ErrorActionPreference = "Stop"
 
 $version=$env:VERSION
-if ($version -eq "") {
+if (-not $version) {
     $version = "0.0.1"
 }
 
 $daemonRoot=$env:DAEMONROOT
-if ($daemonRoot -eq "") {
+if (-not $daemonRoot) {
     $daemonRoot = "webmesh"
 }
 
