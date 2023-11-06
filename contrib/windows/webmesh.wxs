@@ -12,8 +12,6 @@
       <Property Id="ARPURLINFOABOUT" Value="https://webmeshproj.github.io"/>
       <Property Id="ARPNOREPAIR" Value="1"/>
       <Property Id="ARPNOMODIFY" Value="1"/>
-      <Property Id="WIXUI_INSTALLDIR" Value="PRODUCTDIR" />
-      <UIRef Id="WixUI_InstallDir" />
 
       <Upgrade Id="$(var.ProductUpgradeCode)">
          <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
@@ -23,8 +21,9 @@
       <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
 
       <Directory Id="TARGETDIR" Name="SourceDir">
-        <Directory Id="ProgramFilesFolder" Name="ProgamFiles">
-            <Directory Id="WIXUI_INSTALLDIR" Name="Webmesh">
+
+        <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
+            <Directory Id="INSTALLDIR" Name="Webmesh">
                <Component Id="ApplicationFiles" Guid="C1B980AF-8880-4CD2-91E9-D34618CB5978">
                   <File Id="WebmeshVersion" Source="version.txt" Name="version.txt" />
                   <File Id="WebmeshEXE" Source="Webmesh.exe" Name="Webmesh.exe" />
@@ -47,6 +46,7 @@
                </Component>
             </Directory>
          </Directory>
+
          <Directory Id="ProgramMenuFolder">
             <Directory Id="ProgramMenuSubfolder" Name="Webmesh">
                <Component Id="ApplicationShortcuts" Guid="33029A14-1EBB-4DF4-8E8B-0C8CED52C8FE">
@@ -58,6 +58,7 @@
                </Component>
             </Directory>
          </Directory>
+
       </Directory>
 
       <InstallExecuteSequence>
