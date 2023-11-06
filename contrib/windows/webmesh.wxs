@@ -40,7 +40,6 @@
                     Interactive="no"
                   />
                   <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="WebmeshDaemon" Wait="no" />
-                  <ServiceConfig ServiceName="WebmeshDaemon" OnInstall="yes" DelayedAutoStart="yes"/>
                </Component>
             </Directory>
          </Directory>
