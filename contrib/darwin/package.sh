@@ -13,7 +13,6 @@ DAEMONROOT=${DAEMONROOT:-webmesh}
 cp "$DAEMONROOT/dist/webmeshd_darwin_amd64_v1/webmeshd" dist/electron/Packaged/mac/Webmesh.app/Contents/MacOS/webmeshd
 cp "$DAEMONROOT/dist/webmeshd_darwin_arm64/webmeshd" dist/electron/Packaged/mac-arm64/Webmesh.app/Contents/MacOS/webmeshd
 
-
 pkgbuild \
 		--root contrib/darwin/daemon \
 		--install-location "/Library/LaunchDaemons" \
