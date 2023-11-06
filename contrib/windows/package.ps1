@@ -10,13 +10,13 @@ if ($version -eq "") {
     $version = "0.0.1"
 }
 
-$daemonRoot=$env:DAEMON_ROOT
+$daemonRoot=$env:DAEMONROOT
 if ($daemonRoot -eq "") {
-    $daemonRoot = "webmesh\dist"
+    $daemonRoot = "webmesh"
 }
 
-$daemonX64Path = "$daemonRoot\webmeshd_windows_amd64_v1\webmeshd.exe"
-$daemonARM64Path = "$daemonRoot\webmeshd_windows_arm64\webmeshd.exe"
+$daemonX64Path = "$daemonRoot\dist\webmeshd_windows_amd64_v1\webmeshd.exe"
+$daemonARM64Path = "$daemonRoot\dist\webmeshd_windows_arm64\webmeshd.exe"
 
 New-Item -Path "build" -Type Directory
 New-Item -Path "build\x64" -Type Directory
