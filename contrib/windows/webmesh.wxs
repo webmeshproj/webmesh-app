@@ -43,6 +43,7 @@
                     Arguments='--daemon.enabled=true --daemon.grpc-web=true --daemon.cors.enabled=true --daemon.bind=127.0.0.1:58080 --daemon.persistence.path="C:\ProgramData\Webmesh"'
                   />
                   <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="WebmeshDaemon" Wait="no" />
+                  <ServiceConfig ServiceName="WebmeshDaemon" OnInstall="yes" DelayedAutoStart="yes"/>
                </Component>
             </Directory>
          </Directory>
