@@ -28,9 +28,6 @@ New-Item -Path "build" -Type Directory
 New-Item -Path "build\x64" -Type Directory
 New-Item -Path "build\arm64" -Type Directory
 
-Write-Output "$VERSION" | Out-File -Force -FilePath "build\x64\version.txt"
-Write-Output "$VERSION" | Out-File -Force -FilePath "build\arm64\version.txt"
-
 Copy-Item "LICENSE" "build\x64\LICENSE.txt"
 Copy-Item "LICENSE" "build\arm64\LICENSE.txt"
 

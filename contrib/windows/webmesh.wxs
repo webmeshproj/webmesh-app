@@ -24,7 +24,6 @@
         <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
             <Directory Id="INSTALLDIR" Name="Webmesh">
                <Component Id="ApplicationFiles" Guid="C1B980AF-8880-4CD2-91E9-D34618CB5978">
-                  <File Id="WebmeshVersion" Source="version.txt" Name="version.txt" />
                   <File Id="WebmeshEXE" Source="Webmesh.exe" Name="Webmesh.exe" />
                   <File Id="WebmeshDaemonEXE" Source="webmeshd.exe" KeyPath="yes" Name="webmeshd.exe" />
                   <File Id="License" Source="LICENSE.txt" Name="LICENSE.txt" />
