@@ -23,7 +23,7 @@ if ($daemonRoot -eq "") {
 $daemonX64Path = "$daemonRoot\dist\webmeshd_windows_amd64_v1\webmeshd.exe"
 $daemonARM64Path = "$daemonRoot\dist\webmeshd_windows_arm64\webmeshd.exe"
 
-Remove-Item -Force -Recurse "build"
+Remove-Item -Force -Recurse -ErrorAction Ignore "build"
 New-Item -Path "build" -Type Directory
 New-Item -Path "build\x64" -Type Directory
 New-Item -Path "build\arm64" -Type Directory
