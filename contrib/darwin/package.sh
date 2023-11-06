@@ -8,9 +8,11 @@
 rm -rf build
 mkdir -p build
 
+VERSION=${VERSION:-0.0.1}
 DAEMONROOT=${DAEMONROOT:-webmesh}
 cp "$DAEMONROOT/dist/webmeshd_darwin_amd64_v1/webmeshd" dist/electron/Packaged/mac/Webmesh.app/Contents/MacOS/webmeshd
 cp "$DAEMONROOT/dist/webmeshd_darwin_arm64/webmeshd" dist/electron/Packaged/mac-arm64/Webmesh.app/Contents/MacOS/webmeshd
+
 
 pkgbuild \
 		--root contrib/darwin/daemon \
@@ -37,9 +39,9 @@ pkgbuild \
 productbuild \
     --package build/daemon-scripts.pkg \
     --package build/app-x64.pkg \
-    build/Webmesh-x64-Unsigned.pkg
+    build/Webmesh-x64-$VERSION-Unsigned.pkg
 
 productbuild \
     --package build/daemon-scripts.pkg \
     --package build/app-arm64.pkg \
-    build/Webmesh-arm64-Unsigned.pkg
+    build/Webmesh-arm64-$VERSION-Unsigned.pkg
