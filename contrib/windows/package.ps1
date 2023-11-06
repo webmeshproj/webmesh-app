@@ -1,7 +1,11 @@
 #!powershell
 
 # This script is used to build the Windows installer.
-# It is intended for use from CI, but can be used locally by setting the DAEMONROOT environment variable.
+# It is intended for use from CI, but can be used locally by setting
+# the DAEMONROOT environment variable to a repository path where the
+# webmeshd binary can be found.
+
+# TODO: Download and bundle the wintun driver for the installer.
 
 Set-PSDebug -Trace 1
 $ErrorActionPreference = "Stop"
