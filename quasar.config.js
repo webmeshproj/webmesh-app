@@ -181,7 +181,6 @@ module.exports = configure(function (/* ctx */) {
         productName: 'Webmesh',
         artifactName: '${productName}-${version}-${arch}.${ext}',
         copyright: 'Copyright © 2023 Avi Zimmerman',
-        electronLanguages: ['en'],
         linux: {
           icon: 'src-electron/icons/icon.png',
           category: 'Network',
