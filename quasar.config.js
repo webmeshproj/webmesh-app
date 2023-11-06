@@ -209,7 +209,7 @@ module.exports = configure(function (/* ctx */) {
           icon: 'src-electron/icons/icon.ico',
           target: [
             {
-              target: 'nsis',
+              target: 'portable',
               arch: ['arm64', 'x64'],
             },
           ],
