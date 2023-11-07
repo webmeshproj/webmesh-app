@@ -60,5 +60,5 @@ Pop-Location
 Push-Location "build\arm64"
 Write-Host "Building arm64 installer"
 candle "..\..\contrib\windows\webmesh.wxs"
-light -o "webmesh-arm64-$VERSION.msi" "webmesh.wixobj"
+light -sval -o "webmesh-arm64-$VERSION.msi" "webmesh.wixobj"
 Pop-Location
