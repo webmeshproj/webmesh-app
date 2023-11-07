@@ -55,7 +55,7 @@ sed "s/ProductVersion = \`".*\`"/ProductVersion = \`"$VERSION\`"/" "contrib/wind
 Push-Location "build\x64"
 Write-Host "Building x64 installer"
 candle "..\..\contrib\windows\webmesh.wxs"
-light -o "webmesh-x64-$VERSION.msi" "webmesh.wixobj"
+light -sval -o "webmesh-x64-$VERSION.msi" "webmesh.wixobj"
 Pop-Location
 
 Push-Location "build\arm64"
