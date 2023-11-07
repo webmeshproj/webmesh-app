@@ -15,7 +15,7 @@
     "build:mac": "quasar build --mode electron --target mac --publish never",
     "build:linux": "quasar build --mode electron --target linux --publish onTag",
     "build:all": "quasar build --mode electron --target all --publish never",
-    "package:linux": "echo Linux package is a no-op (AppImage)",
+    "package:linux": "echo 'Linux package is a no-op (AppImage)'",
     "package:mac": "contrib/darwin/package.sh",
     "package:win": "powershell contrib/windows/package.ps1",
     "clean": "rm -rf dist/ node_modules/"
