@@ -2,7 +2,8 @@
 <?define ProductVersion = "0.0.1"?>
 <?define ProductUpgradeCode = "EF415CCE-508A-48ED-8F73-A0E8F76C1F32"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-   <Product Id="*" UpgradeCode="$(var.ProductUpgradeCode)" Name="Webmesh" Version="$(var.ProductVersion)" Manufacturer="WebmeshProj" Language="1033">
+    <SuppressValidation>true</SuppressValidation>
+    <Product Id="*" UpgradeCode="$(var.ProductUpgradeCode)" Name="Webmesh" Version="$(var.ProductVersion)" Manufacturer="WebmeshProj" Language="1033">
       <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package"/>
       <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
 
@@ -64,5 +65,5 @@
          <ComponentRef Id="ApplicationFiles"/>
          <ComponentRef Id="ApplicationShortcuts"/>
       </Feature>
-   </Product>
+    </Product>
 </Wix>

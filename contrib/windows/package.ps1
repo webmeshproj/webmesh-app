@@ -51,13 +51,13 @@ Copy-Item -Force "src-electron/icons/icon.png" "build\arm64\Webmesh.ico"
 Write-Host "Setting ProductVersion in Wix file"
 sed "s/ProductVersion = \`".*\`"/ProductVersion = \`"$VERSION\`"/" "contrib/windows/webmesh.wxs" | Set-Content "contrib\windows\webmesh.wxs"
 
-Push-Location build\x64
+Push-Location "build\x64"
 Write-Host "Building x64 installer"
 candle "..\..\contrib\windows\webmesh.wxs"
 light -o "webmesh-x64-$VERSION.msi" "webmesh.wixobj"
 Pop-Location
 
-Push-Location build\arm64
+Push-Location "build\arm64"
 Write-Host "Building arm64 installer"
 candle "..\..\contrib\windows\webmesh.wxs"
 light -o "webmesh-arm64-$VERSION.msi" "webmesh.wixobj"
