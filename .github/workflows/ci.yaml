@@ -10,6 +10,7 @@ env:
   WEBMESH_VERSION: main
   WEBMESHD_BUILD_ARGS: --snapshot --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
+  VERSION: ${{ startswith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
 
 jobs:
   build:
@@ -71,3 +72,11 @@ jobs:
 
       - name: Build Electron App
         run: yarn && yarn build:${{ matrix.target }}
+
+      - name: Package App for macOS
+        if: ${{ matrix.target == 'mac' }}
+        run: yarn package:mac
+
+      - name: Package App for Windows
+        if: ${{ matrix.target == 'win' }}
+        run: yarn package:win
