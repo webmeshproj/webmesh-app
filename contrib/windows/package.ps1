@@ -49,7 +49,7 @@ Copy-Item -Force "src-electron/icons/icon.png" "build\x64\Webmesh.ico"
 Copy-Item -Force "src-electron/icons/icon.png" "build\arm64\Webmesh.ico"
 
 Write-Host "Setting ProductVersion in Wix file"
-sed "s/ProductVersion = `".*`"/ProductVersion = `"$VERSION`"/" "contrib/windows/webmesh.wxs" | Set-Content "contrib\windows\webmesh.wxs"
+sed "s/ProductVersion = \`".*\`"/ProductVersion = \`"$VERSION\`"/" "contrib/windows/webmesh.wxs" | Set-Content "contrib\windows\webmesh.wxs"
 
 Push-Location build\x64
 Write-Host "Building x64 installer"
