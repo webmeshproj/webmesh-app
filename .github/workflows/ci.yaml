@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 env:
+  DAEMONROOT: webmesh
   WEBMESH_VERSION: main
   WEBMESHD_BUILD_ARGS: --snapshot --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
@@ -41,7 +42,7 @@ jobs:
         with:
           repository: webmeshproj/webmesh
           ref: ${{ env.WEBMESH_VERSION }}
-          path: webmesh
+          path: ${{ env.DAEMONROOT }}
           fetch-depth: 0
 
       - name: Setup Go
@@ -50,7 +51,7 @@ jobs:
           go-version: stable
           check-latest: true
           cache: ${{ !startswith(matrix.runner, 'self-hosted') && matrix.target != 'mac' }}
-          cache-dependency-path: webmesh/go.sum
+          cache-dependency-path: ${{ env.DAEMONROOT }}/go.sum
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -67,7 +68,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           version: latest
-          workdir: webmesh
+          workdir: ${{ env.DAEMONROOT }}
           args: build ${{ env.WEBMESHD_BUILD_ARGS }}
 
       - name: Build Electron App
