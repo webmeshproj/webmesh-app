@@ -49,7 +49,7 @@ jobs:
         with:
           go-version: stable
           check-latest: true
-          cache: ${{ !startswith(matrix.runner, 'self-hosted') }}
+          cache: ${{ !startswith(matrix.runner, 'self-hosted') && matrix.target != 'mac' }}
           cache-dependency-path: webmesh/go.sum
 
       - name: Setup Node
