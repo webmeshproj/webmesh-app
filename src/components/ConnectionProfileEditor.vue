@@ -27,6 +27,7 @@
               <q-card-section>
                 <q-select
                   label="Join Addresses"
+                  hint="Press Enter to add a new address"
                   dense
                   v-model="profile.addrs"
                   use-input

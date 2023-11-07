@@ -7,7 +7,11 @@ import {
 } from '@connectrpc/connect';
 import { createGrpcWebTransport } from '@connectrpc/connect-web';
 import { AppDaemon } from '@webmesh/api/ts/v1/app_connect';
-import { StatusResponse, ConnectionStatus } from '@webmesh/api/ts/v1/app_pb';
+import {
+  ConnectionStatusResponse,
+  ConnectionStatus,
+  DaemonStatus,
+} from '@webmesh/api/ts/v1/app_pb';
 import { MeshNodes } from '@webmesh/api/ts/utils/rpcdb';
 
 export const DefaultDaemonAddress = '127.0.0.1:58080';
@@ -57,11 +61,21 @@ export const useClientStore = defineStore('client', {
         }
         return new Promise((resolve, reject) => {
           this.daemon
-            .status({ ids: [profile] })
-            .then((res: StatusResponse) => resolve(res.statuses[profile]))
+            .connectionStatus({ ids: [profile] })
+            .then((res: ConnectionStatusResponse) =>
+              resolve(res.statuses[profile])
+            )
             .catch((err: Error) => reject(err));
         });
       };
+    },
+    daemonStatus(): Promise<DaemonStatus> {
+      return new Promise((resolve, reject) => {
+        this.daemon
+          .status({})
+          .then((res: DaemonStatus) => resolve(res))
+          .catch((err: Error) => reject(err));
+      });
     },
   },
 

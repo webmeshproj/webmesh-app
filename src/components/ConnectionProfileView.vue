@@ -71,7 +71,7 @@ import {
   ConnectRequest,
   DisconnectRequest,
   ConnectionStatus,
-  ConnectionStatus_Status,
+  DaemonConnStatus,
 } from '@webmesh/api/ts/v1/app_pb';
 import { ConnectionProfile } from '../stores/profiles';
 import { useClientStore } from '../stores/client';
@@ -131,13 +131,13 @@ export default defineComponent({
           .status(props.profile.id)
           .then((status: ConnectionStatus) => {
             switch (status.connectionStatus) {
-              case ConnectionStatus_Status.DISCONNECTED:
+              case DaemonConnStatus.DISCONNECTED:
                 resolve(false);
                 break;
-              case ConnectionStatus_Status.CONNECTED:
+              case DaemonConnStatus.CONNECTED:
                 resolve(true);
                 break;
-              case ConnectionStatus_Status.CONNECTING:
+              case DaemonConnStatus.CONNECTING:
                 resolve(null);
                 break;
             }

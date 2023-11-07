@@ -789,9 +789,9 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.3.7.tgz#0091852fe5cc4237c8440fe32f3ab6bc920ae6d9"
   integrity sha512-N/tbkINRUDExgcPTBvxNkvHGu504k8lzlNQRITVnm6YjOjwa4r0nnbd4Jb01sNpur5hAllyRJzSK5PvB9PPwRg==
 
-"@webmesh/api@https://github.com/webmeshproj/api":
+"@webmesh/api@https://github.com/webmeshproj/api#v0.11.2":
   version "1.0.0"
-  resolved "https://github.com/webmeshproj/api#9bb84d7e358b1775d527e411d4b3be58b5f59231"
+  resolved "https://github.com/webmeshproj/api#44868283d39704fd8ef47a9e846814803fd5f16c"
   dependencies:
     "@bufbuild/protobuf" "^1.4.1"
     "@connectrpc/connect" "^1.1.3"
