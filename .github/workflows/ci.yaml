@@ -8,8 +8,8 @@ on:
 
 env:
   DAEMONROOT: webmesh
-  WEBMESH_VERSION: main
-  WEBMESHD_BUILD_ARGS: --snapshot --clean --id webmeshd
+  WEBMESH_VERSION: v0.16.1
+  WEBMESHD_BUILD_ARGS: --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
   VERSION: ${{ startswith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
 
