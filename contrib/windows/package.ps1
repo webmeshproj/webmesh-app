@@ -35,12 +35,12 @@ function Protect-Asset {
          [Parameter(Mandatory=$false, Position=1)]
          [boolean] $Seal
     )
-    if ($env:SIGN -eq 'true' -and $env:SIGNER_NAME) {
+    if ($env:SIGN -eq 'true' -and $env:WINDOWS_SIGNER_NAME) {
         Write-Host "+++        Signing $Name"
         if ($Seal) {
-            signtool sign /seal /a /n "$env:SIGNER_NAME" "$Name"
+            signtool sign /seal /a /n "$env:WINDOWS_SIGNER_NAME" "$Name"
         } else {
-            signtool sign /a /n "$env:SIGNER_NAME" "$Name"
+            signtool sign /a /n "$env:WINDOWS_SIGNER_NAME" "$Name"
         }
     } else {
         Write-Host "+++        SIGN and/or SIGNER_NAME not set, skipping signature of $Name"
