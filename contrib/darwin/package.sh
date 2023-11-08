@@ -14,8 +14,11 @@ APPID="com.webmeshproj.app"
 VERSION=${VERSION:-0.0.1}
 DAEMONROOT=${DAEMONROOT:-webmesh}
 SIGN=${SIGN:-"false"}
-SIGNER=${MAC_APP_SIGNER_NAME}
-INSTALL_SIGNER=${MAC_INSTALL_SIGNER_NAME}
+SIGNER="${MAC_APP_SIGNER_NAME}"
+INSTALL_SIGNER="${MAC_INSTALL_SIGNER_NAME}"
+NOTARIZATION_TEAMID="${MAC_NOTARIZATION_TEAMID}"
+NOTARIZATION_USERNAME="${MAC_NOTARIZATION_USERNAME}"
+NOTARIZATION_PASSWORD="${MAC_NOTARIZATION_PASSWORD}"
 
 echo "+ Building macOS installer for version $VERSION"
 
@@ -85,4 +88,38 @@ if [[ "${SIGN}" == "true" && "${INSTALL_SIGNER}" != "" ]] ; then
         build/Webmesh-x64-$VERSION-Unsigned.pkg build/Webmesh-x64-$VERSION.pkg
     productsign --sign "${INSTALL_SIGNER}" \
         build/Webmesh-arm64-$VERSION-Unsigned.pkg build/Webmesh-arm64-$VERSION.pkg
+
+    echo "+++ Notarizing installer packages"
+    echo "++++ Uploading x64 package"
+    UUID=$(xcrun altool -t osx -f build/Webmesh-x64-$VERSION.pkg \
+      --primary-bundle-id com.webmeshproj.app \
+      --team-id "${NOTARIZATION_TEAMID}" \
+      --notarize-app \
+      --username "${NOTARIZATION_USERNAME}" \
+      -p "${NOTARIZATION_PASSWORD}" \
+        | grep RequestUUID \
+        | awk '{print $NF}')
+    while true; do
+        sleep 5
+        echo "++++ Checking notary status...."
+        xcrun altool --notarization-info "${UUID}" -p "${NOTARIZATION_PASSWORD}" --username "${NOTARIZATION_USERNAME}" | grep -s Approved && break
+    done
+    echo "++++ Stapling x64 package"
+    xcrun stapler staple -v build/Webmesh-x64-$VERSION.pkg
+    echo "++++ Uploading arm64 package"
+    UUID=$(xcrun altool -t osx -f build/Webmesh-arm64-$VERSION.pkg \
+      --primary-bundle-id com.webmeshproj.app \
+      --team-id "${NOTARIZATION_TEAMID}" \
+      --notarize-app \
+      --username "${NOTARIZATION_USERNAME}" \
+      -p "${NOTARIZATION_PASSWORD}" \
+        | grep RequestUUID \
+        | awk '{print $NF}')
+    while true; do
+        sleep 5
+        echo "++++ Checking notary status...."
+        xcrun altool --notarization-info "${UUID}" -p "${NOTARIZATION_PASSWORD}" --username "${NOTARIZATION_USERNAME}" | grep -s Approved && break
+    done
+    echo "++++ Stapling arm64 package"
+    xcrun stapler staple -v build/Webmesh-arm64-$VERSION.pkg
 fi
