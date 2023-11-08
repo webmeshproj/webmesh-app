@@ -1,68 +1,77 @@
-<?xml version="1.0"?>
-<?define ProductVersion = "0.0.1"?>
+<?define ProductVersion = "$(env.VERSION)"?>
 <?define ProductUpgradeCode = "EF415CCE-508A-48ED-8F73-A0E8F76C1F32"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <Product Id="*" UpgradeCode="$(var.ProductUpgradeCode)" Name="Webmesh" Version="$(var.ProductVersion)" Manufacturer="WebmeshProj" Language="1033">
-      <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package"/>
-      <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+   <Package UpgradeCode="$(var.ProductUpgradeCode)" Name="Webmesh" Version="$(var.ProductVersion)" Manufacturer="WebmeshProj" Language="1033" InstallerVersion="200"><Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
 
-      <Icon Id="ProductIcon" SourceFile="Webmesh.ico"/>
-      <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
-      <Property Id="ARPHELPLINK" Value="https://webmeshproj.github.io"/>
-      <Property Id="ARPURLINFOABOUT" Value="https://webmeshproj.github.io"/>
-      <Property Id="ARPNOREPAIR" Value="1"/>
-      <Property Id="ARPNOMODIFY" Value="1"/>
+      <Icon Id="ProductIcon" SourceFile="Webmesh.ico" />
+      <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+      <Property Id="ARPHELPLINK" Value="https://webmeshproj.github.io" />
+      <Property Id="ARPURLINFOABOUT" Value="https://webmeshproj.github.io" />
+      <Property Id="ARPNOREPAIR" Value="1" />
+      <Property Id="ARPNOMODIFY" Value="1" />
 
       <Upgrade Id="$(var.ProductUpgradeCode)">
-         <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
-         <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no"
-                         Property="OLDERVERSIONBEINGUPGRADED"/>
+         <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+         <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
       </Upgrade>
-      <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
-
-      <Directory Id="TARGETDIR" Name="SourceDir">
-        <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
-            <Directory Id="INSTALLDIR" Name="Webmesh">
-               <Component Id="ApplicationFiles" Guid="C1B980AF-8880-4CD2-91E9-D34618CB5978">
-                  <File Id="WebmeshEXE" Source="Webmesh.exe" Name="Webmesh.exe" />
-                  <File Id="WebmeshDaemonEXE" Source="webmeshd.exe" KeyPath="yes" Name="webmeshd.exe" />
-                  <File Id="License" Source="LICENSE.txt" Name="LICENSE.txt" />
-                  <ServiceInstall
-                    Id="ServiceInstaller"
-                    Type="ownProcess"
-                    Name="WebmeshDaemon"
-                    DisplayName="Webmesh Helper Daemon"
-                    Description="Webmesh Helper Daemon"
-                    Start="auto"
-                    Vital="yes"
-                    Account="LocalSystem"
-                    ErrorControl="normal"
-                    Interactive="no"
-                  />
-                  <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="WebmeshDaemon" Wait="no" />
-               </Component>
-            </Directory>
-         </Directory>
-         <Directory Id="ProgramMenuFolder">
-            <Directory Id="ProgramMenuSubfolder" Name="Webmesh">
-               <Component Id="ApplicationShortcuts" Guid="33029A14-1EBB-4DF4-8E8B-0C8CED52C8FE">
-                  <Shortcut Id="ApplicationShortcut1" Name="Webmesh" Description="Webmesh"
-                            Target="[INSTALLDIR]Webmesh.exe" WorkingDirectory="INSTALLDIR"/>
-                  <RegistryValue Root="HKCU" Key="Software\WebmeshProj\Webmesh"
-                            Name="installed" Type="integer" Value="1" KeyPath="yes"/>
-                  <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
-               </Component>
-            </Directory>
-         </Directory>
-      </Directory>
+      <Launch Condition="NOT NEWERVERSIONDETECTED" Message="A newer version of this software is already installed." />
 
       <InstallExecuteSequence>
-         <RemoveExistingProducts After="InstallValidate"/>
+         <RemoveExistingProducts After="InstallValidate" />
       </InstallExecuteSequence>
 
       <Feature Id="DefaultFeature" Level="1">
-         <ComponentRef Id="ApplicationFiles"/>
-         <ComponentRef Id="ApplicationShortcuts"/>
+         <ComponentRef Id="AppData" />
+         <ComponentRef Id="AppFiles" />
+         <ComponentRef Id="AppShortcuts" />
+         <ComponentRef Id="Daemon" />
       </Feature>
-    </Product>
+    
+      <StandardDirectory Id="CommonAppDataFolder">
+         <Directory Id="Data" Name="Webmesh">
+            <Component Id="AppData" Guid="DA71B876-3869-4D89-B8EC-1FCA4149D9A6" />
+         </Directory>
+      </StandardDirectory>
+
+      <StandardDirectory Id="System64Folder">
+         <Directory Id="System">
+            <Component Id="Daemon" Guid="A53FBC08-6543-48A9-91BC-2CA0855A5F98">
+               <File Id="WebmeshDaemonEXE" Source="webmeshd.exe" KeyPath="yes" Name="webmeshd.exe" />
+               <File Id="WinTUN" Source="wintun.dll" Name="wintun.dll" />
+               <ServiceInstall
+                  Id="ServiceInstaller"
+                  Type="ownProcess"
+                  Name="WebmeshDaemon"
+                  DisplayName="Webmesh Helper Daemon"
+                  Description="Webmesh Helper Daemon"
+                  Start="auto"
+                  Vital="yes"
+                  Account="LocalSystem"
+                  ErrorControl="normal"
+                  Interactive="no"
+               />
+               <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="WebmeshDaemon" Wait="no" />
+            </Component>
+         </Directory>
+      </StandardDirectory>
+
+      <StandardDirectory Id="ProgramFiles64Folder">
+         <Directory Id="InstallDir" Name="Webmesh">
+            <Component Id="AppFiles" Guid="C1B980AF-8880-4CD2-91E9-D34618CB5978">
+               <File Id="WebmeshEXE" Source="Webmesh.exe" KeyPath="yes" Name="Webmesh.exe" />
+               <File Id="License" Source="LICENSE.txt" Name="LICENSE.txt" />
+            </Component>
+         </Directory>
+      </StandardDirectory>
+
+      <StandardDirectory Id="ProgramMenuFolder">
+         <Directory Id="ProgramMenuSubfolder" Name="Webmesh">
+            <Component Id="AppShortcuts" Guid="33029A14-1EBB-4DF4-8E8B-0C8CED52C8FE">
+               <Shortcut Id="ApplicationShortcut1" Name="Webmesh" Description="Webmesh" Target="[InstallDir]Webmesh.exe" WorkingDirectory="InstallDir" />
+               <RegistryValue Root="HKCU" Key="Software\WebmeshProj\Webmesh" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+               <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall" />
+            </Component>
+         </Directory>
+      </StandardDirectory>
+   </Package>
 </Wix>

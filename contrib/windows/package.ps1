@@ -5,61 +5,109 @@
 # the DAEMONROOT environment variable to a repository path where the
 # webmeshd binary can be found.
 
-# TODO: Download and bundle the wintun driver for the installer.
-
 $ErrorActionPreference = "Stop"
 
 $VERSION=$env:VERSION
 if (-not $version) {
-    $version = "0.0.1"
+    $VERSION = "0.0.1"
+    $env:VERSION=$VERSION
 }
 
 $DAEMONROOT=$env:DAEMONROOT
 if (-not $daemonRoot) {
     $DAEMONROOT = "webmesh"
 }
-
 $DAEMONX64PATH = "$DAEMONROOT\dist\webmeshd_windows_amd64_v1\webmeshd.exe"
 $DAEMONARM64PATH = "$DAEMONROOT\dist\webmeshd_windows_arm64\webmeshd.exe"
 
-Write-Host "Building Windows installer for version $VERSION"
-Remove-Item -Force -Recurse -ErrorAction Ignore "build"
-New-Item -Path "build" -Type Directory
-New-Item -Path "build\x64" -Type Directory
-New-Item -Path "build\arm64" -Type Directory
+$BUILDROOT="build"
+$BUILDX64ROOT="$BUILDROOT\x64"
+$BUILDARM64ROOT="$BUILDROOT\arm64"
 
-Write-Host "Copying bundle assets to build directory"
+$PACKAGEX64="webmesh-x64-$VERSION.msi"
+$PACKAGEARM64="webmesh-arm64-$VERSION.msi"
 
-Write-Host "    Copying LICENSE"
-Copy-Item "LICENSE" "build\x64\LICENSE.txt"
-Copy-Item "LICENSE" "build\arm64\LICENSE.txt"
+function Sign-Asset {
+    Param
+    (
+         [Parameter(Mandatory=$true, Position=0)]
+         [string] $Name,
+         [Parameter(Mandatory=$false, Position=1)]
+         [boolean] $Seal
+    )
+    if ($env:SIGN -eq 'true' -and $env:SIGNER_NAME) {
+        Write-Host "+++        Signing $Name"
+        if ($Seal) {
+            signtool sign /seal /a /n "$env:SIGNER_NAME" "$Name"
+        } else {
+            signtool sign /a /n "$env:SIGNER_NAME" "$Name"
+        }
+    } else {
+        Write-Host "+++        SIGN and/or SIGNER_NAME not set, skipping signature of $Name"
+    }
+}
 
-Write-Host "    Copying Electron App"
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" "build\x64\Webmesh.exe"
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" "build\arm64\Webmesh.exe"
+Write-Host "+ Building Windows Installers for Version $VERSION"
+Write-Host "++    x64 Build: $BUILDX64ROOT"
+Write-Host "++    arm64 Build: $BUILDARM64ROOT"
 
-Write-Host "    Copying webmeshd"
-Write-Host "        x64: $DAEMONX64PATH"
-Write-Host "        arm64: $DAEMONARM64PATH"
-Copy-Item -Force "$DAEMONX64PATH" "build\x64\webmeshd.exe"
-Copy-Item -Force "$DAEMONARM64PATH" "build\arm64\webmeshd.exe"
+[void](Remove-Item -Force -Recurse -ErrorAction Ignore "build")
+[void](New-Item -Path "$BUILDROOT" -Type Directory)
+[void](New-Item -Path "$BUILDX64ROOT" -Type Directory)
+[void](New-Item -Path "$BUILDARM64ROOT" -Type Directory)
 
-Write-Host "    Copying Icon files"
-Copy-Item -Force "src-electron/icons/icon.png" "build\x64\Webmesh.ico"
-Copy-Item -Force "src-electron/icons/icon.png" "build\arm64\Webmesh.ico"
+$WINTUNVERSION="0.14.1"
+Write-Host "+ Downloading Wintun drivers - Version: $WINTUNVERSION..."
+Invoke-WebRequest -Uri "https://www.wintun.net/builds/wintun-$WINTUNVERSION.zip" -OutFile "$BUILDROOT\wintun-$WINTUNVERSION.zip"
+Expand-Archive "$BUILDROOT\wintun-$WINTUNVERSION.zip" -DestinationPath "$BUILDROOT"
 
-Write-Host "Setting ProductVersion in Wix file"
-sed "s/ProductVersion = \`".*\`"/ProductVersion = \`"$VERSION\`"/" "contrib/windows/webmesh.wxs" `
-    | Set-Content "contrib\windows\webmesh.wxs"
+Write-Host "++    Copying wintun drivers to package directories"
+$WINTUNX64PATH="$BUILDROOT\wintun\bin\amd64\wintun.dll"
+$WINTUNARM64PATH="$BUILDROOT\wintun\bin\arm64\wintun.dll"
+Write-Host "++++           x64 Source: $WINTUNX64PATH"
+Write-Host "++++           arm64 Source: $WINTUNARM64PATH"
+Copy-Item "$WINTUNX64PATH" "$BUILDX64ROOT\wintun.dll"
+Copy-Item "$WINTUNARM64PATH" "$BUILDARM64ROOT\wintun.dll"
 
-Push-Location "build\x64"
-Write-Host "Building x64 installer"
-candle "..\..\contrib\windows\webmesh.wxs"
-light -sval -o "webmesh-x64-$VERSION.msi" "webmesh.wixobj"
+Write-Host "++    Copying bundle assets to package directories"
+
+Write-Host "+++        Copying LICENSE"
+Sign-Asset -Name "LICENSE" -Seal $true
+Copy-Item "LICENSE" "$BUILDX64ROOT\LICENSE.txt"
+Copy-Item "LICENSE" "$BUILDARM64ROOT\LICENSE.txt"
+
+Write-Host "+++        Copying Electron App"
+Sign-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" -Seal $false
+Sign-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" -Seal $false
+Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" "$BUILDX64ROOT\Webmesh.exe"
+Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" "$BUILDARM64ROOT\Webmesh.exe"
+
+Write-Host "+++        Copying Icon files"
+Copy-Item -Force "src-electron/icons/icon.png" "$BUILDX64ROOT\Webmesh.ico"
+Copy-Item -Force "src-electron/icons/icon.png" "$BUILDARM64ROOT\Webmesh.ico"
+Sign-Asset -Name "$BUILDX64ROOT\Webmesh.ico" -Seal $true
+Sign-Asset -Name "$BUILDARM64ROOT\Webmesh.ico" -Seal $true
+
+Write-Host "+++        Copying webmeshd"
+Write-Host "++++           x64 Source: $DAEMONX64PATH"
+Write-Host "++++           arm64 Source: $DAEMONARM64PATH"
+Copy-Item -Force "$DAEMONX64PATH" "$BUILDX64ROOT\webmeshd.exe"
+Copy-Item -Force "$DAEMONARM64PATH" "$BUILDARM64ROOT\webmeshd.exe"
+Sign-Asset -Name "$BUILDX64ROOT\webmeshd.exe" -Seal $false
+Sign-Asset -Name "$BUILDARM64ROOT\webmeshd.exe" -Seal $false
+
+$WIXFILE="..\..\contrib\windows\webmesh.wxs"
+
+Write-Host "++    Building x64 installer to $BUILDX64ROOT\$PACKAGEX64"
+Push-Location "$BUILDX64ROOT"
+wix build -o "$PACKAGEX64" "$WIXFILE"
 Pop-Location
 
-Push-Location "build\arm64"
-Write-Host "Building arm64 installer"
-candle "..\..\contrib\windows\webmesh.wxs"
-light -sval -o "webmesh-arm64-$VERSION.msi" "webmesh.wixobj"
+Write-Host "++    Building arm64 installer to $BUILDARM64ROOT\$PACKAGEARM64"
+Push-Location "$BUILDARM64ROOT"
+wix build -o "$PACKAGEARM64" "$WIXFILE"
 Pop-Location
+
+Write-Host "++    Signing installers"
+Sign-Asset -Name "$BUILDX64ROOT\$PACKAGEX64"
+Sign-Asset -Name "$BUILDARM64ROOT\$PACKAGEARM64"
