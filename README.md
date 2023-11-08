@@ -1,6 +1,7 @@
 # Webmesh App
 
-An application for connecting to Webmesh networks
+An application for connecting to Webmesh networks.
+For more information on Webmesh, see the [webmesh repository](https://github.com/webmeshproj/webmesh) or [project website](https://webmeshproj.github.io/).
 
 ## Installation
 
