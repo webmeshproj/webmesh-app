@@ -77,10 +77,3 @@ jobs:
 
       - name: Package App Installer
         run: yarn package:${{ matrix.target }}
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.target }}-installers
-          path: ${{ matrix.artifact-regex }}
-          retention-days: 3
