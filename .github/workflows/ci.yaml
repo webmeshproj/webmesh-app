@@ -64,10 +64,6 @@ jobs:
           check-latest: true
           node-version-file: .nvmrc
 
-      - name: Install UPX on Hosted macOS Runners
-        if: ${{ matrix.target == 'mac' && !startsWith(matrix.runner, 'self-hosted') }}
-        run: brew install upx
-
       - name: Build Webmesh Helper Daemon
         if: ${{ matrix.target != 'linux' }}
         uses: goreleaser/goreleaser-action@v5
