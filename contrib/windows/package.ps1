@@ -27,7 +27,7 @@ $BUILDARM64ROOT="$BUILDROOT\arm64"
 $PACKAGEX64="webmesh-x64-$VERSION.msi"
 $PACKAGEARM64="webmesh-arm64-$VERSION.msi"
 
-function Sign-Asset {
+function Protect-Asset {
     Param
     (
          [Parameter(Mandatory=$true, Position=0)]
@@ -72,42 +72,40 @@ Copy-Item "$WINTUNARM64PATH" "$BUILDARM64ROOT\wintun.dll"
 Write-Host "++    Copying bundle assets to package directories"
 
 Write-Host "+++        Copying LICENSE"
-Sign-Asset -Name "LICENSE" -Seal $true
+Protect-Asset -Name "LICENSE" -Seal $true
 Copy-Item "LICENSE" "$BUILDX64ROOT\LICENSE.txt"
 Copy-Item "LICENSE" "$BUILDARM64ROOT\LICENSE.txt"
 
 Write-Host "+++        Copying Electron App"
-Sign-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" -Seal $false
-Sign-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" -Seal $false
+Protect-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" -Seal $false
+Protect-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" -Seal $false
 Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" "$BUILDX64ROOT\Webmesh.exe"
 Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" "$BUILDARM64ROOT\Webmesh.exe"
 
 Write-Host "+++        Copying Icon files"
 Copy-Item -Force "src-electron/icons/icon.png" "$BUILDX64ROOT\Webmesh.ico"
 Copy-Item -Force "src-electron/icons/icon.png" "$BUILDARM64ROOT\Webmesh.ico"
-Sign-Asset -Name "$BUILDX64ROOT\Webmesh.ico" -Seal $true
-Sign-Asset -Name "$BUILDARM64ROOT\Webmesh.ico" -Seal $true
+Protect-Asset -Name "$BUILDX64ROOT\Webmesh.ico" -Seal $true
+Protect-Asset -Name "$BUILDARM64ROOT\Webmesh.ico" -Seal $true
 
 Write-Host "+++        Copying webmeshd"
 Write-Host "++++           x64 Source: $DAEMONX64PATH"
 Write-Host "++++           arm64 Source: $DAEMONARM64PATH"
 Copy-Item -Force "$DAEMONX64PATH" "$BUILDX64ROOT\webmeshd.exe"
 Copy-Item -Force "$DAEMONARM64PATH" "$BUILDARM64ROOT\webmeshd.exe"
-Sign-Asset -Name "$BUILDX64ROOT\webmeshd.exe" -Seal $false
-Sign-Asset -Name "$BUILDARM64ROOT\webmeshd.exe" -Seal $false
+Protect-Asset -Name "$BUILDX64ROOT\webmeshd.exe" -Seal $false
+Protect-Asset -Name "$BUILDARM64ROOT\webmeshd.exe" -Seal $false
 
 $WIXFILE="..\..\contrib\windows\webmesh.wxs"
 
 Write-Host "++    Building x64 installer to $BUILDX64ROOT\$PACKAGEX64"
 Push-Location "$BUILDX64ROOT"
 wix build -o "$PACKAGEX64" "$WIXFILE"
+Protect-Asset -Name "$PACKAGEX64"
 Pop-Location
 
 Write-Host "++    Building arm64 installer to $BUILDARM64ROOT\$PACKAGEARM64"
 Push-Location "$BUILDARM64ROOT"
 wix build -o "$PACKAGEARM64" "$WIXFILE"
+Protect-Asset -Name "$PACKAGEARM64"
 Pop-Location
-
-Write-Host "++    Signing installers"
-Sign-Asset -Name "$BUILDX64ROOT\$PACKAGEX64"
-Sign-Asset -Name "$BUILDARM64ROOT\$PACKAGEARM64"

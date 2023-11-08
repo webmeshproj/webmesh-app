@@ -26,7 +26,7 @@
          <ComponentRef Id="AppShortcuts" />
          <ComponentRef Id="Daemon" />
       </Feature>
-    
+
       <StandardDirectory Id="CommonAppDataFolder">
          <Directory Id="Data" Name="Webmesh">
             <Component Id="AppData" Guid="DA71B876-3869-4D89-B8EC-1FCA4149D9A6" />
