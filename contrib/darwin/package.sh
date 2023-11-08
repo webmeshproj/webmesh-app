@@ -11,7 +11,7 @@ rm -rf build
 mkdir -p build
 
 APPID="com.webmeshproj.app"
-VERSION=${VERSION:-0.0.1}
+VERSION=${VERSION:-0.0.2}
 DAEMONROOT=${DAEMONROOT:-webmesh}
 SIGN=${SIGN:-"false"}
 SIGNER="${MAC_APP_SIGNER_NAME}"

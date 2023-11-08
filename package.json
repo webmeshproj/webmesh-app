@@ -1,6 +1,6 @@
 {
   "name": "webmesh",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An application for connecting to Webmesh networks",
   "productName": "Webmesh",
   "author": "Avi Zimmerman <avi.zimmerman@gmail.com>",
@@ -13,7 +13,7 @@
     "build": "quasar build --mode electron",
     "build:win": "quasar build --mode electron --target win --publish never",
     "build:mac": "quasar build --mode electron --target mac --publish never",
-    "build:linux": "quasar build --mode electron --target linux --publish onTag",
+    "build:linux": "quasar build --mode electron --target linux --publish never",
     "build:all": "quasar build --mode electron --target all --publish never",
     "package:linux": "echo 'Linux package is a no-op (AppImage)'",
     "package:mac": "contrib/darwin/package.sh",
