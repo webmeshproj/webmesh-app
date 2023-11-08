@@ -11,7 +11,9 @@ import {
   ConnectionStatusResponse,
   ConnectionStatus,
   DaemonStatus,
+  MetricsResponse,
 } from '@webmesh/api/ts/v1/app_pb';
+import { InterfaceMetrics } from '@webmesh/api/ts/v1/node_pb';
 import { MeshNodes } from '@webmesh/api/ts/utils/rpcdb';
 
 export const DefaultDaemonAddress = '127.0.0.1:58080';
@@ -65,6 +67,19 @@ export const useClientStore = defineStore('client', {
             .then((res: ConnectionStatusResponse) =>
               resolve(res.statuses[profile])
             )
+            .catch((err: Error) => reject(err));
+        });
+      };
+    },
+    metrics(): (profile: string | undefined) => Promise<InterfaceMetrics> {
+      return (profile) => {
+        if (!profile) {
+          return Promise.reject(new Error('No profile specified'));
+        }
+        return new Promise((resolve, reject) => {
+          this.daemon
+            .metrics({ ids: [profile] })
+            .then((res: MetricsResponse) => resolve(res.interfaces[profile]))
             .catch((err: Error) => reject(err));
         });
       };

@@ -53,9 +53,40 @@
         </div>
       </q-item-section>
     </q-item>
-    <q-separator />
-    <q-card-section horizontal class="justify-start" v-if="connected">
-    </q-card-section>
+    <q-item v-if="connected" class="row">
+      <q-expansion-item
+        icon="info"
+        label="Connection Info"
+        class="row"
+        dense
+        :default-open="false"
+      >
+        <div class="q-px-md">
+          <div>
+            <strong class="q-px-sm">Node FQDN:</strong>
+            {{ connectionStatus.node?.id }}.{{ connectionDetails.meshDomain }}.
+          </div>
+          <div>
+            <strong class="q-px-sm">IPv4 Address:</strong>
+            {{ connectionDetails.ipv4Address }}
+            <strong class="q-px-sm">IPv6 Address:</strong>
+            {{ connectionDetails.ipv6Address }}
+          </div>
+          <div>
+            <strong class="q-px-sm">IPv4 Network:</strong>
+            {{ connectionDetails.ipv4Network }}
+            <strong class="q-px-sm">IPv6 Network:</strong>
+            {{ connectionDetails.ipv6Network }}
+          </div>
+          <div>
+            <strong class="q-px-sm">Total Transmit:</strong>
+            {{ interfaceMetrics.totalTransmitBytes }}
+            <strong class="q-px-sm">Total Receive:</strong>
+            {{ interfaceMetrics.totalReceiveBytes }}
+          </div>
+        </div>
+      </q-expansion-item>
+    </q-item>
   </q-card>
 </template>
 
@@ -69,10 +100,12 @@ import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import {
   ConnectRequest,
+  ConnectResponse,
   DisconnectRequest,
   ConnectionStatus,
   DaemonConnStatus,
 } from '@webmesh/api/ts/v1/app_pb';
+import { InterfaceMetrics } from '@webmesh/api/ts/v1/node_pb';
 import { ConnectionProfile } from '../stores/profiles';
 import { useClientStore } from '../stores/client';
 
@@ -116,6 +149,9 @@ export default defineComponent({
     const q = useQuasar();
     const client = useClientStore();
     const connected = ref<boolean | null>(false);
+    const connectionDetails = ref<ConnectResponse>(new ConnectResponse());
+    const connectionStatus = ref<ConnectionStatus>(new ConnectionStatus());
+    const interfaceMetrics = ref<InterfaceMetrics>(new InterfaceMetrics());
 
     const handleDaemonError = (err: Error, msg: string) => {
       console.log('Error communicating with daemon', err);
@@ -149,11 +185,16 @@ export default defineComponent({
       });
     };
 
+    let statusUnsubscribe: NodeJS.Timeout;
+
     const onClickConnectSwitch = (newValue: boolean | null) => {
       switch (newValue) {
         case false:
           // We are switching to disconnected from connected
           console.log('Disconnecting from profile', props.profile.id);
+          if (statusUnsubscribe) {
+            clearInterval(statusUnsubscribe);
+          }
           connected.value = null;
           const disconnectRequest = new DisconnectRequest({
             id: props.profile.id,
@@ -174,8 +215,27 @@ export default defineComponent({
           const connectRequest = new ConnectRequest(props.profile);
           client.daemon
             .connect(connectRequest)
-            .then(() => {
+            .then((res: ConnectResponse) => {
+              connectionDetails.value = res;
               connected.value = true;
+              client
+                .status(props.profile.id)
+                .then((status) => {
+                  connectionStatus.value = status;
+                })
+                .catch((err: Error) => {
+                  handleDaemonError(err, 'Error getting connection status');
+                });
+              statusUnsubscribe = setInterval(() => {
+                client
+                  .metrics(props.profile.id)
+                  .then((metrics: InterfaceMetrics) => {
+                    interfaceMetrics.value = metrics;
+                  })
+                  .catch((err: Error) => {
+                    handleDaemonError(err, 'Error getting interface metrics');
+                  });
+              }, 3000);
             })
             .catch((err: Error) => {
               handleDaemonError(err, 'Error connecting to profile');
@@ -193,7 +253,13 @@ export default defineComponent({
       connected.value = status;
     });
 
-    return { connected, onClickConnectSwitch };
+    return {
+      connected,
+      connectionDetails,
+      connectionStatus,
+      interfaceMetrics,
+      onClickConnectSwitch,
+    };
   },
 });
 </script>
