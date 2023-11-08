@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches: [main]
-    tags: [v*]
+    tags: ['*']
   pull_request:
     branches: [main]
 
@@ -11,7 +11,7 @@ env:
   WEBMESH_VERSION: v0.16.3
   WEBMESHD_BUILD_ARGS: --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
-  VERSION: ${{ startswith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
+  VERSION: ${{ startswith(github.ref, 'refs/tags/') && github.ref_name || '' }}
   SIGN: ${{ vars.SIGN }}
   WINDOWS_SIGNER_NAME: ${{ vars.WINDOWS_SIGNER_NAME }}
 
