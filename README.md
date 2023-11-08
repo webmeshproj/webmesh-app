@@ -1,4 +1,4 @@
-# Webmesh App (webmesh-app)
+# Webmesh App
 
 An application for connecting to Webmesh networks
 
