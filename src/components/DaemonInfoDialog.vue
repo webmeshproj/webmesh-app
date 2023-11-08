@@ -44,6 +44,7 @@ import { useClientStore } from 'src/stores/client';
 
 export default defineComponent({
   name: 'DaemonInfoDialog',
+  emits: [...useDialogPluginComponent.emits],
   setup() {
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
