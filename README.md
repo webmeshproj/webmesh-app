@@ -11,6 +11,13 @@ The AppImages and macOS pkg installers are not currently signed and the Windows 
 This means on macOS you may need to right-click the app and select "Open" to bypass Gatekeeper or explicitly allow access via System Preferences > Security & Privacy > General.
 On Windows you may need to click "More info" and then "Run anyway" to bypass SmartScreen.
 
+Linux does not bundle the Webmesh daemon with the AppImage.
+Instead, follow the [Webmesh installation instructions](https://webmeshproj.github.io/documentation/installation-instructions/#linux) for your distribution and enable the `webmeshd` service.
+
+```bash
+sudo systemctl enable --now webmeshd
+```
+
 ## Development
 
 ### Install the dependencies
