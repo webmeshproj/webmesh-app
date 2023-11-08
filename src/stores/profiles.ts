@@ -31,7 +31,10 @@ export function newDefaultConnectionProfile(): ConnectionProfile {
     id: '',
     authMethod: DefaultAuthMethod,
     authCredentials: {},
-    networking: {},
+    networking: {
+      detectEndpoints: false,
+      detectPrivateEndpoints: false,
+    },
     bootstrap: {
       enabled: false,
       domain: DefaultMeshDomain,

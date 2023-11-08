@@ -1,5 +1,5 @@
 <template>
-  <q-dialog persistent ref="dialogRef" @hide="onDialogHide">
+  <q-dialog persistent ref="dialogRef" @hide="onDialogHide" full-width>
     <q-card class="q-dialog-plugin">
       <div class="text-h6 q-pa-md">{{ title }}</div>
       <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset">
@@ -7,6 +7,7 @@
           <q-input
             dense
             ref="nameInputRef"
+            class="q-px-lg"
             v-model="profile.id"
             :clearable="isNewProfile"
             :disable="!isNewProfile"
@@ -39,61 +40,107 @@
                   :disable="profile.bootstrap.enabled"
                 />
 
+                <!-- Endpoint Settings -->
+                <q-expansion-item
+                  dense
+                  group="endpoints"
+                  icon="cell_tower"
+                  label="Endpoints"
+                  class="q-pt-sm"
+                >
+                  <q-select
+                    label="Endpoints"
+                    hint="Addresses where other nodes can reach you"
+                    dense
+                    class="q-px-lg"
+                    v-model="profile.networking.endpoints"
+                    use-input
+                    use-chips
+                    multiple
+                    hide-dropdown-icon
+                    input-debounce="0"
+                    new-value-mode="add-unique"
+                    :disable="profile.bootstrap.enabled"
+                  />
+                  <q-checkbox
+                    v-model="profile.networking.detectEndpoints"
+                    size="xs"
+                    label="Detect from Host"
+                    class="q-py-sm q-px-lg"
+                    dense
+                  />
+                  <q-checkbox
+                    v-model="profile.networking.detectPrivateEndpoints"
+                    size="xs"
+                    label="Include Private Endpoints"
+                    class="q-py-sm"
+                    dense
+                    v-if="profile.networking.detectEndpoints"
+                  />
+                </q-expansion-item>
+
                 <!-- Bootstrap Settings -->
-                <div class="q-ma-sm text-caption">
-                  Bootstrap
-                  <div class="column q-pa-sm justify-start">
-                    <q-checkbox
-                      v-model="profile.bootstrap.enabled"
-                      size="xs"
-                      label="Enabled"
-                      @update:model-value="
-                        () => {
-                          profile.services.enabled = true;
-                          if (
-                            !profile.services.features.includes(
-                              Feature.MEMBERSHIP
-                            )
-                          ) {
-                            profile.services.features.push(Feature.MEMBERSHIP);
-                          }
+                <q-expansion-item
+                  dense
+                  group="bootstrap"
+                  icon="flag"
+                  label="Bootstrap"
+                  class="q-pt-sm"
+                >
+                  <q-checkbox
+                    v-model="profile.bootstrap.enabled"
+                    size="xs"
+                    label="Enabled"
+                    class="q-px-md"
+                    @update:model-value="
+                      () => {
+                        profile.services.enabled = true;
+                        if (
+                          !profile.services.features.includes(
+                            Feature.MEMBERSHIP
+                          )
+                        ) {
+                          profile.services.features.push(Feature.MEMBERSHIP);
                         }
-                      "
+                      }
+                    "
+                  />
+                  <q-expansion-item
+                    dense
+                    group="meshsettings"
+                    icon="router"
+                    label="Mesh Settings"
+                    class="q-px-md"
+                    v-if="profile.bootstrap.enabled"
+                  >
+                    <q-input
+                      dense
+                      class="q-px-lg"
+                      v-model="profile.bootstrap.domain"
+                      :disable="!isNewProfile"
+                      :placeholder="DefaultMeshDomain"
+                      hint="Domain name of the mesh network"
                     />
-                    <div
-                      class="q-pa-sm text-caption"
-                      v-if="profile.bootstrap.enabled"
-                    >
-                      Mesh Settings
-                      <q-input
-                        dense
-                        v-model="profile.bootstrap.domain"
-                        :disable="!isNewProfile"
-                        :placeholder="DefaultMeshDomain"
-                        hint="Domain name of the mesh network"
-                      />
-                      <q-input
-                        dense
-                        v-model="profile.bootstrap.ipv4Network"
-                        :disable="!isNewProfile"
-                        :placeholder="DefaultMeshIPv4Network"
-                        hint="IPv4 CIDR of the mesh network"
-                      />
-                      <q-checkbox
-                        v-model="profile.bootstrap.rbacEnabled"
-                        size="xs"
-                        label="Enable RBAC"
-                        :disable="!isNewProfile"
-                      />
-                      <div class="q-px-sm text-caption">
-                        Default Network Policy
-                      </div>
+                    <q-input
+                      dense
+                      class="q-px-lg"
+                      v-model="profile.bootstrap.ipv4Network"
+                      :disable="!isNewProfile"
+                      :placeholder="DefaultMeshIPv4Network"
+                      hint="IPv4 CIDR of the mesh network"
+                    />
+                    <div class="q-py-sm q-px-lg text-caption">
+                      Access Control
+                    </div>
+                    <div class="row q-px-lg justify-around">
+                      <strong>Default Network Policy</strong>
                       <q-radio
                         v-model="profile.bootstrap.defaultNetworkACL"
                         :val="DefaultNetworkACL.ACCEPT"
                         :disable="!isNewProfile"
                         label="Accept"
                         color="positive"
+                        dense
                       />
                       <q-radio
                         v-model="profile.bootstrap.defaultNetworkACL"
@@ -101,10 +148,18 @@
                         :disable="!isNewProfile"
                         label="Drop"
                         color="negative"
+                        dense
+                      />
+                      <q-checkbox
+                        v-model="profile.bootstrap.rbacEnabled"
+                        size="xs"
+                        label="Enable RBAC"
+                        :disable="!isNewProfile"
+                        dense
                       />
                     </div>
-                  </div>
-                </div>
+                  </q-expansion-item>
+                </q-expansion-item>
               </q-card-section>
             </q-expansion-item>
 
