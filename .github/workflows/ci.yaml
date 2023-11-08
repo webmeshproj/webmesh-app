@@ -12,6 +12,8 @@ env:
   WEBMESHD_BUILD_ARGS: --clean --id webmeshd
   GH_TOKEN: ${{ github.token }}
   VERSION: ${{ startswith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
+  SIGN: ${{ vars.SIGN }}
+  WINDOWS_SIGNER_NAME: ${{ vars.WINDOWS_SIGNER_NAME }}
 
 jobs:
   build:
