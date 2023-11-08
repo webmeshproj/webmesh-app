@@ -17,7 +17,7 @@ yarn dev
 ### Start a local daemon process
 
 ```bash
-docker-compose -f daemon/docker-compose.yaml up  # -d to run in background
+docker-compose -f contrib/docker/docker-compose.yaml up  # -d to run in background
 ```
 
 A gRPC UI will be available at http://localhost:8080.
