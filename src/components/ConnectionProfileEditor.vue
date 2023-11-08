@@ -39,7 +39,13 @@
                   new-value-mode="add-unique"
                   :disable="profile.bootstrap.enabled"
                 />
-
+                <q-checkbox
+                  v-model="profile.networking.useDNS"
+                  size="xs"
+                  label="Use MeshDNS Servers"
+                  class="q-py-sm"
+                  dense
+                />
                 <!-- Endpoint Settings -->
                 <q-expansion-item
                   dense

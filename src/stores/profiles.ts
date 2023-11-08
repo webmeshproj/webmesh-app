@@ -34,6 +34,7 @@ export function newDefaultConnectionProfile(): ConnectionProfile {
     networking: {
       detectEndpoints: false,
       detectPrivateEndpoints: false,
+      useDNS: false,
     },
     bootstrap: {
       enabled: false,
