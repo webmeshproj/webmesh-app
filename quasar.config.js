@@ -179,7 +179,7 @@ module.exports = configure(function (/* ctx */) {
         // https://www.electron.build/configuration/configuration
         appId: 'com.webmeshproj.app',
         productName: 'Webmesh',
-        artifactName: '${productName}-${version}-${arch}.${ext}',
+        artifactName: '${productName}-${arch}.${ext}',
         copyright: 'Copyright © 2023 Avi Zimmerman',
         linux: {
           icon: 'src-electron/icons/icon.png',

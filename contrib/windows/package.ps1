@@ -77,10 +77,10 @@ Copy-Item "LICENSE" "$BUILDX64ROOT\LICENSE.txt"
 Copy-Item "LICENSE" "$BUILDARM64ROOT\LICENSE.txt"
 
 Write-Host "+++        Copying Electron App"
-Protect-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" -Seal $false
-Protect-Asset -Name "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" -Seal $false
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-x64.exe" "$BUILDX64ROOT\Webmesh.exe"
-Copy-Item -Force "dist\electron\Packaged\Webmesh-$VERSION-arm64.exe" "$BUILDARM64ROOT\Webmesh.exe"
+Protect-Asset -Name "dist\electron\Packaged\Webmesh-x64.exe" -Seal $false
+Protect-Asset -Name "dist\electron\Packaged\Webmesh-arm64.exe" -Seal $false
+Copy-Item -Force "dist\electron\Packaged\Webmesh-x64.exe" "$BUILDX64ROOT\Webmesh.exe"
+Copy-Item -Force "dist\electron\Packaged\Webmesh-arm64.exe" "$BUILDARM64ROOT\Webmesh.exe"
 
 Write-Host "+++        Copying Icon files"
 Copy-Item -Force "src-electron/icons/icon.png" "$BUILDX64ROOT\Webmesh.ico"
