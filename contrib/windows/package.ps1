@@ -9,7 +9,7 @@ $ErrorActionPreference = "Stop"
 
 $VERSION=$env:VERSION
 if (-not $version) {
-    $VERSION = "0.0.2"
+    $VERSION=((git describe --tags --always --dirty) -Split '-')[0]
     $env:VERSION=$VERSION
 }
 

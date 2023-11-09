@@ -11,7 +11,7 @@ rm -rf build
 mkdir -p build
 
 APPID="com.webmeshproj.app"
-VERSION=${VERSION:-0.0.2}
+VERSION=${VERSION}
 DAEMONROOT=${DAEMONROOT:-webmesh}
 SIGN=${SIGN:-"false"}
 SIGNER="${MAC_APP_SIGNER_NAME}"
@@ -19,6 +19,10 @@ INSTALL_SIGNER="${MAC_INSTALL_SIGNER_NAME}"
 NOTARIZATION_TEAMID="${MAC_NOTARIZATION_TEAMID}"
 NOTARIZATION_USERNAME="${MAC_NOTARIZATION_USERNAME}"
 NOTARIZATION_PASSWORD="${MAC_NOTARIZATION_PASSWORD}"
+
+if [[ -z "${VERSION}" ]] ; then
+    VERSION=$(git describe --tags --always --dirty | cut -d '-' -f 1)
+fi
 
 echo "+ Building macOS installer for version $VERSION"
 
