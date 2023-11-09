@@ -45,42 +45,6 @@ export const useClientStore = defineStore('client', {
     peers(): (profile: string) => MeshNodes {
       return (profile) => new MeshNodes(this.daemon, profile);
     },
-    drop(): (profile: string) => Promise<void> {
-      return (profile) => {
-        if (!profile) {
-          return Promise.reject(new Error('No profile specified'));
-        }
-        return new Promise((resolve, reject) => {
-          this.daemon
-            .drop({ id: profile })
-            .then(() => resolve())
-            .catch((err: Error) => reject(err));
-        });
-      };
-    },
-    connect(): (req: ConnectRequest) => Promise<ConnectResponse> {
-      return (req) => {
-        return new Promise((resolve, reject) => {
-          this.daemon
-            .connect(req)
-            .then((res: ConnectResponse) => resolve(res))
-            .catch((err: Error) => reject(err));
-        });
-      };
-    },
-    disconnect(): (profile: string) => Promise<void> {
-      return (profile) => {
-        if (!profile) {
-          return Promise.reject(new Error('No profile specified'));
-        }
-        return new Promise((resolve, reject) => {
-          this.daemon
-            .disconnect({ id: profile })
-            .then(() => resolve())
-            .catch((err: Error) => reject(err));
-        });
-      };
-    },
     status(): (profile: string) => Promise<ConnectionStatus> {
       return (profile) => {
         if (!profile) {
@@ -122,6 +86,36 @@ export const useClientStore = defineStore('client', {
   actions: {
     setDaemonAddress(addr: string) {
       this.daemonAddr = addr;
+    },
+    drop(profile: string): Promise<void> {
+      if (!profile) {
+        return Promise.reject(new Error('No profile specified'));
+      }
+      return new Promise((resolve, reject) => {
+        this.daemon
+          .drop({ id: profile })
+          .then(() => resolve())
+          .catch((err: Error) => reject(err));
+      });
+    },
+    connect(req: ConnectRequest): Promise<ConnectResponse> {
+      return new Promise((resolve, reject) => {
+        this.daemon
+          .connect(req)
+          .then((res: ConnectResponse) => resolve(res))
+          .catch((err: Error) => reject(err));
+      });
+    },
+    disconnect(profile: string): Promise<void> {
+      if (!profile) {
+        return Promise.reject(new Error('No profile specified'));
+      }
+      return new Promise((resolve, reject) => {
+        this.daemon
+          .disconnect({ id: profile })
+          .then(() => resolve())
+          .catch((err: Error) => reject(err));
+      });
     },
   },
 });
