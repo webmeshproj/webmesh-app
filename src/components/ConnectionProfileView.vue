@@ -101,7 +101,6 @@ import { useQuasar } from 'quasar';
 import {
   ConnectRequest,
   ConnectResponse,
-  DisconnectRequest,
   ConnectionStatus,
   DaemonConnStatus,
 } from '@webmesh/api/ts/v1/app_pb';
@@ -196,11 +195,8 @@ export default defineComponent({
             clearInterval(statusUnsubscribe);
           }
           connected.value = null;
-          const disconnectRequest = new DisconnectRequest({
-            id: props.profile.id,
-          });
-          client.daemon
-            .disconnect(disconnectRequest)
+          client
+            .disconnect(props.profile.id)
             .catch((err: Error) => {
               handleDaemonError(err, 'Error disconnecting from profile');
             })
@@ -212,9 +208,8 @@ export default defineComponent({
           // We are switching to connecting from disconnected
           console.log('Connecting to profile', props.profile.id);
           connected.value = null;
-          const connectRequest = new ConnectRequest(props.profile);
-          client.daemon
-            .connect(connectRequest)
+          client
+            .connect(new ConnectRequest(props.profile))
             .then((res: ConnectResponse) => {
               connectionDetails.value = res;
               connected.value = true;
