@@ -30,17 +30,17 @@
                   label="Join Addresses"
                   hint="Press Enter to add a new address"
                   dense
-                  v-model="profile.addrs"
+                  v-model="profile.params.addrs"
                   use-input
                   use-chips
                   multiple
                   hide-dropdown-icon
                   input-debounce="0"
                   new-value-mode="add-unique"
-                  :disable="profile.bootstrap.enabled"
+                  :disable="profile.params.bootstrap.enabled"
                 />
                 <q-checkbox
-                  v-model="profile.networking.useDNS"
+                  v-model="profile.params.networking.useDNS"
                   size="xs"
                   label="Use MeshDNS Servers"
                   class="q-py-sm"
@@ -59,29 +59,29 @@
                     hint="Addresses where other nodes can reach you"
                     dense
                     class="q-px-lg"
-                    v-model="profile.networking.endpoints"
+                    v-model="profile.params.networking.endpoints"
                     use-input
                     use-chips
                     multiple
                     hide-dropdown-icon
                     input-debounce="0"
                     new-value-mode="add-unique"
-                    :disable="profile.bootstrap.enabled"
+                    :disable="profile.params.bootstrap.enabled"
                   />
                   <q-checkbox
-                    v-model="profile.networking.detectEndpoints"
+                    v-model="profile.params.networking.detectEndpoints"
                     size="xs"
                     label="Detect from Host"
                     class="q-py-sm q-px-lg"
                     dense
                   />
                   <q-checkbox
-                    v-model="profile.networking.detectPrivateEndpoints"
+                    v-model="profile.params.networking.detectPrivateEndpoints"
                     size="xs"
                     label="Include Private Endpoints"
                     class="q-py-sm"
                     dense
-                    v-if="profile.networking.detectEndpoints"
+                    v-if="profile.params.networking.detectEndpoints"
                   />
                 </q-expansion-item>
 
@@ -94,19 +94,21 @@
                   class="q-pt-sm"
                 >
                   <q-checkbox
-                    v-model="profile.bootstrap.enabled"
+                    v-model="profile.params.bootstrap.enabled"
                     size="xs"
                     label="Enabled"
                     class="q-px-md"
                     @update:model-value="
                       () => {
-                        profile.services.enabled = true;
+                        profile.params.services.enabled = true;
                         if (
-                          !profile.services.features.includes(
+                          !profile.params.services.features.includes(
                             Feature.MEMBERSHIP
                           )
                         ) {
-                          profile.services.features.push(Feature.MEMBERSHIP);
+                          profile.params.services.features.push(
+                            Feature.MEMBERSHIP
+                          );
                         }
                       }
                     "
@@ -117,22 +119,22 @@
                     icon="router"
                     label="Mesh Settings"
                     class="q-px-md"
-                    v-if="profile.bootstrap.enabled"
+                    v-if="profile.params.bootstrap.enabled"
                   >
                     <q-input
                       dense
                       class="q-px-lg"
-                      v-model="profile.bootstrap.domain"
+                      v-model="profile.params.bootstrap.domain"
                       :disable="!isNewProfile"
-                      :placeholder="DefaultMeshDomain"
+                      :placeholder="Defaults.meshDomain"
                       hint="Domain name of the mesh network"
                     />
                     <q-input
                       dense
                       class="q-px-lg"
-                      v-model="profile.bootstrap.ipv4Network"
+                      v-model="profile.params.bootstrap.ipv4Network"
                       :disable="!isNewProfile"
-                      :placeholder="DefaultMeshIPv4Network"
+                      :placeholder="Defaults.ipv4Network"
                       hint="IPv4 CIDR of the mesh network"
                     />
                     <div class="q-py-sm q-px-lg text-caption">
@@ -141,7 +143,7 @@
                     <div class="row q-px-lg justify-around">
                       <strong>Default Network Policy</strong>
                       <q-radio
-                        v-model="profile.bootstrap.defaultNetworkACL"
+                        v-model="profile.params.bootstrap.defaultNetworkACL"
                         :val="DefaultNetworkACL.ACCEPT"
                         :disable="!isNewProfile"
                         label="Accept"
@@ -149,7 +151,7 @@
                         dense
                       />
                       <q-radio
-                        v-model="profile.bootstrap.defaultNetworkACL"
+                        v-model="profile.params.bootstrap.defaultNetworkACL"
                         :val="DefaultNetworkACL.DROP"
                         :disable="!isNewProfile"
                         label="Drop"
@@ -157,7 +159,7 @@
                         dense
                       />
                       <q-checkbox
-                        v-model="profile.bootstrap.rbacEnabled"
+                        v-model="profile.params.bootstrap.rbacEnabled"
                         size="xs"
                         label="Enable RBAC"
                         :disable="!isNewProfile"
@@ -181,53 +183,53 @@
                 <div class="row q-pa-sm justify-around">
                   <q-radio
                     dense
-                    v-model="profile.authMethod"
+                    v-model="profile.params.authMethod"
                     checked-icon="task_alt"
                     :val="NetworkAuthMethod.NO_AUTH"
                     label="None"
                   />
                   <q-radio
                     dense
-                    v-model="profile.authMethod"
+                    v-model="profile.params.authMethod"
                     checked-icon="task_alt"
                     :val="NetworkAuthMethod.BASIC"
                     label="Basic"
                   />
                   <q-radio
                     dense
-                    v-model="profile.authMethod"
+                    v-model="profile.params.authMethod"
                     checked-icon="task_alt"
                     :val="NetworkAuthMethod.LDAP"
                     label="LDAP"
                   />
                   <q-radio
                     dense
-                    v-model="profile.authMethod"
+                    v-model="profile.params.authMethod"
                     checked-icon="task_alt"
                     :val="NetworkAuthMethod.ID"
                     label="ID"
                   />
                   <q-radio
                     dense
-                    v-model="profile.authMethod"
+                    v-model="profile.params.authMethod"
                     checked-icon="task_alt"
                     :val="NetworkAuthMethod.MTLS"
                     label="mTLS"
-                    @click="profile.tls.enabled = true"
+                    @click="profile.params.tls.enabled = true"
                   />
                 </div>
                 <div
                   class="q-pa-sm text-caption"
                   v-if="
-                    profile.authMethod === NetworkAuthMethod.BASIC ||
-                    profile.authMethod === NetworkAuthMethod.LDAP
+                    profile.params.authMethod === NetworkAuthMethod.BASIC ||
+                    profile.params.authMethod === NetworkAuthMethod.LDAP
                   "
                 >
                   Credentials
                   <q-input
-                    v-if="profile.authMethod === NetworkAuthMethod.BASIC"
+                    v-if="profile.params.authMethod === NetworkAuthMethod.BASIC"
                     v-model="
-                      profile.authCredentials[
+                      profile.params.authCredentials[
                         AuthHeader.BASIC_USERNAME.toString()
                       ]
                     "
@@ -236,9 +238,9 @@
                     label="Basic Username"
                   />
                   <q-input
-                    v-if="profile.authMethod === NetworkAuthMethod.BASIC"
+                    v-if="profile.params.authMethod === NetworkAuthMethod.BASIC"
                     v-model="
-                      profile.authCredentials[
+                      profile.params.authCredentials[
                         AuthHeader.BASIC_PASSWORD.toString()
                       ]
                     "
@@ -247,9 +249,9 @@
                     label="Basic Password"
                   />
                   <q-input
-                    v-if="profile.authMethod === NetworkAuthMethod.LDAP"
+                    v-if="profile.params.authMethod === NetworkAuthMethod.LDAP"
                     v-model="
-                      profile.authCredentials[
+                      profile.params.authCredentials[
                         AuthHeader.LDAP_USERNAME.toString()
                       ]
                     "
@@ -258,9 +260,9 @@
                     label="LDAP Username"
                   />
                   <q-input
-                    v-if="profile.authMethod === NetworkAuthMethod.LDAP"
+                    v-if="profile.params.authMethod === NetworkAuthMethod.LDAP"
                     v-model="
-                      profile.authCredentials[
+                      profile.params.authCredentials[
                         AuthHeader.LDAP_PASSWORD.toString()
                       ]
                     "
@@ -272,41 +274,43 @@
                 <div class="q-mx-sm text-caption">TLS</div>
                 <div
                   :class="
-                    profile.tls.enabled
+                    profile.params.tls.enabled
                       ? 'row q-pa-sm justify-around'
                       : 'row q-pa-sm justify-start'
                   "
                 >
                   <q-checkbox
                     dense
-                    v-model="profile.tls.enabled"
+                    v-model="profile.params.tls.enabled"
                     size="xs"
                     label="Enabled"
-                    :disable="profile.authMethod === NetworkAuthMethod.MTLS"
+                    :disable="
+                      profile.params.authMethod === NetworkAuthMethod.MTLS
+                    "
                   />
                   <q-checkbox
                     dense
-                    v-model="profile.tls.skipVerify"
+                    v-model="profile.params.tls.skipVerify"
                     size="xs"
                     label="Skip Verify"
-                    @click="profile.tls.verifyChainOnly = false"
-                    v-if="profile.tls.enabled"
+                    @click="profile.params.tls.verifyChainOnly = false"
+                    v-if="profile.params.tls.enabled"
                   />
                   <q-checkbox
                     dense
-                    v-model="profile.tls.verifyChainOnly"
+                    v-model="profile.params.tls.verifyChainOnly"
                     size="xs"
                     label="Verify Chain Only"
-                    @click="profile.tls.skipVerify = false"
-                    v-if="profile.tls.enabled"
+                    @click="profile.params.tls.skipVerify = false"
+                    v-if="profile.params.tls.enabled"
                   />
                 </div>
                 <div
                   class="col q-pa-sm justify-around"
-                  v-if="profile.tls.enabled"
+                  v-if="profile.params.tls.enabled"
                 >
                   <q-input
-                    v-model="profile.tls.caCertData"
+                    v-model="profile.params.tls.caCertData"
                     dense
                     clearable
                     label="TLS CA Certificate"
@@ -334,14 +338,14 @@
                     </template>
                   </q-input>
                   <q-input
-                    v-model="profile.tls.certData"
+                    v-model="profile.params.tls.certData"
                     dense
                     clearable
                     label="TLS Certificate"
                     ref="tlsCertRef"
                     v-if="
-                      profile.authMethod === NetworkAuthMethod.MTLS ||
-                      profile.services.enabled
+                      profile.params.authMethod === NetworkAuthMethod.MTLS ||
+                      profile.params.services.enabled
                     "
                   >
                     <template v-slot:after>
@@ -366,14 +370,14 @@
                     </template>
                   </q-input>
                   <q-input
-                    v-model="profile.tls.keyData"
+                    v-model="profile.params.tls.keyData"
                     dense
                     clearable
                     label="TLS Key"
                     ref="tlsKeyRef"
                     v-if="
-                      profile.authMethod === NetworkAuthMethod.MTLS ||
-                      profile.services.enabled
+                      profile.params.authMethod === NetworkAuthMethod.MTLS ||
+                      profile.params.services.enabled
                     "
                   >
                     <template v-slot:after>
@@ -412,15 +416,15 @@
                 <div class="column q-px-sm justify-start">
                   <q-checkbox
                     dense
-                    v-model="profile.services.enabled"
+                    v-model="profile.params.services.enabled"
                     size="xs"
                     label="Enabled"
-                    :disable="profile.bootstrap.enabled"
+                    :disable="profile.params.bootstrap.enabled"
                   >
                     <q-tooltip
                       anchor="bottom middle"
                       self="top middle"
-                      v-if="profile.bootstrap.enabled"
+                      v-if="profile.params.bootstrap.enabled"
                     >
                       <span style="font-size: small">
                         Cannot disable services when bootstrap is enabled
@@ -428,9 +432,9 @@
                     </q-tooltip>
                   </q-checkbox>
                   <q-input
-                    v-model="profile.services.listenAddress"
+                    v-model="profile.params.services.listenAddress"
                     label="Listen Address"
-                    v-if="profile.services.enabled"
+                    v-if="profile.params.services.enabled"
                     :rules="[
                       (value: string) => {
                         return (
@@ -442,14 +446,14 @@
                   />
                 </div>
 
-                <div v-if="profile.services.enabled">
+                <div v-if="profile.params.services.enabled">
                   <!-- Membership -->
                   <div class="text-caption">Membership</div>
                   <div class="q-px-sm q-gutter-sm">
                     <q-tooltip
                       anchor="bottom middle"
                       self="top middle"
-                      v-if="profile.bootstrap.enabled"
+                      v-if="profile.params.bootstrap.enabled"
                     >
                       <span style="font-size: small">
                         Cannot change membership settings when bootstrap is
@@ -458,19 +462,19 @@
                     </q-tooltip>
                     <q-checkbox
                       dense
-                      v-model="profile.services.features"
-                      :disable="profile.bootstrap.enabled"
+                      v-model="profile.params.services.features"
+                      :disable="profile.params.bootstrap.enabled"
                       :val="Feature.MEMBERSHIP"
                       label="Voter"
                       @click="
-                        profile.services?.features?.includes(
+                        profile.params.services.features.includes(
                           Feature.MEMBERSHIP
                         ) &&
-                          profile.services?.features?.includes(
+                          profile.params.services.features.includes(
                             Feature.STORAGE_QUERIER
                           ) &&
-                          profile.services?.features?.splice(
-                            profile.services.features.indexOf(
+                          profile.params.services.features.splice(
+                            profile.params.services.features.indexOf(
                               Feature.STORAGE_QUERIER
                             ),
                             1
@@ -479,19 +483,19 @@
                     />
                     <q-checkbox
                       dense
-                      v-model="profile.services.features"
-                      :disable="profile.bootstrap.enabled"
+                      v-model="profile.params.services.features"
+                      :disable="profile.params.bootstrap.enabled"
                       :val="Feature.STORAGE_QUERIER"
                       label="Observer"
                       @click="
-                        profile.services?.features?.includes(
+                        profile.params.services.features.includes(
                           Feature.STORAGE_QUERIER
                         ) &&
-                          profile.services?.features?.includes(
+                          profile.params.services.features.includes(
                             Feature.MEMBERSHIP
                           ) &&
-                          profile.services?.features?.splice(
-                            profile.services.features.indexOf(
+                          profile.params.services.features.splice(
+                            profile.params.services.features.indexOf(
                               Feature.MEMBERSHIP
                             ),
                             1
@@ -505,19 +509,19 @@
                   <div class="q-px-sm q-gutter-sm">
                     <q-checkbox
                       dense
-                      v-model="profile.services.features"
+                      v-model="profile.params.services.features"
                       :val="Feature.MESH_API"
                       label="Mesh"
                     />
                     <q-checkbox
                       dense
-                      v-model="profile.services.features"
+                      v-model="profile.params.services.features"
                       :val="Feature.ICE_NEGOTIATION"
                       label="WebRTC"
                     />
                     <q-checkbox
                       dense
-                      v-model="profile.services.features"
+                      v-model="profile.params.services.features"
                       :val="Feature.ADMIN_API"
                       label="Admin"
                     />
@@ -527,25 +531,25 @@
                   <div class="q-px-md q-gutter-sm">
                     <q-checkbox
                       dense
-                      v-model="profile.services.dns.enabled"
+                      v-model="profile.params.services.dns.enabled"
                       size="xs"
                       label="Enabled"
                     />
                     <q-input
                       dense
                       clearable
-                      v-model="profile.services.dns.listenUDP"
+                      v-model="profile.params.services.dns.listenUDP"
                       label="Listen UDP"
                       hint="Leave blank to disable UDP"
-                      v-if="profile.services.dns.enabled"
+                      v-if="profile.params.services.dns.enabled"
                     />
                     <q-input
                       dense
                       clearable
-                      v-model="profile.services.dns.listenTCP"
+                      v-model="profile.params.services.dns.listenTCP"
                       label="Listen TCP"
                       hint="Leave blank to disable TCP"
-                      v-if="profile.services.dns.enabled"
+                      v-if="profile.params.services.dns.enabled"
                     />
                   </div>
                 </div>
@@ -583,21 +587,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useDialogPluginComponent, QInput, QFile } from 'quasar';
+import { defineComponent, ref, watch } from 'vue';
+import { QInput, QFile, useDialogPluginComponent, useQuasar } from 'quasar';
 import {
   NetworkAuthMethod,
-  ConnectRequest_AuthHeader as AuthHeader,
+  ConnectionParameters_AuthHeader as AuthHeader,
   MeshConnBootstrap_DefaultNetworkACL as DefaultNetworkACL,
-} from '@webmesh/api/ts/v1/app_pb';
-import { Feature } from '@webmesh/api/ts/v1/node_pb';
-import {
-  ConnectionProfile,
-  DefaultMeshDomain,
-  DefaultMeshIPv4Network,
-  newDefaultConnectionProfile,
-  useProfileStore,
-} from '../stores/profiles';
+} from '@webmeshproject/api/v1/app_pb';
+import { Feature } from '@webmeshproject/api/v1/node_pb';
+import { Defaults, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
+import { useDaemonStore } from 'src/stores/daemon';
 
 const NewConnectionTitle = 'New Connection Profile';
 const EditConnectionTitle = 'Edit Connection Profile';
@@ -609,7 +608,7 @@ export default defineComponent({
   components: {},
   props: {
     current: {
-      type: Object as () => ConnectionProfile,
+      type: Object as () => NetworkParameters,
       required: false,
     },
   },
@@ -617,25 +616,40 @@ export default defineComponent({
   setup(props) {
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
-    const profiles = useProfileStore();
+    const q = useQuasar();
+
+    const daemon = useDaemonStore();
+    const { networks, error } = useWebmesh(daemon.options);
+
+    watch(error, (err) => {
+      if (err && err.value?.message) {
+        q.notify({
+          type: 'negative',
+          message: 'Error communicating with daemon',
+          caption: err.value?.message,
+          position: 'top',
+          timeout: 3000,
+        });
+      }
+    });
+
     const isNewProfile = !props.current?.id;
     const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
 
-    const profile = ref<ConnectionProfile>(
-      props.current
-        ? { ...props.current }
-        : { ...newDefaultConnectionProfile() }
+    const profile = ref<NetworkParameters>(
+      props.current ? { ...props.current } : Defaults.parameters()
     );
     const onReset = () =>
       (profile.value = props.current
         ? { ...props.current }
-        : { ...newDefaultConnectionProfile() });
+        : Defaults.parameters());
 
     const caCertRef = ref<QInput | null>(null);
     const tlsCertRef = ref<QInput | null>(null);
     const tlsKeyRef = ref<QInput | null>(null);
     const filePickerTarget = ref<QInput | null>(null);
     const filePickerRef = ref<QFile | null>(null);
+
     const pickTLSFile = () => {
       filePickerRef.value?.pickFiles();
     };
@@ -643,15 +657,15 @@ export default defineComponent({
       const reader = new FileReader();
       reader.onloadend = () => {
         if (filePickerTarget.value === caCertRef.value) {
-          profile.value.tls.caCertData = btoa(
+          profile.value.params.tls.caCertData = btoa(
             reader.result?.toString() || ''
           ) as string;
         } else if (filePickerTarget.value === tlsCertRef.value) {
-          profile.value.tls.certData = btoa(
+          profile.value.params.tls.certData = btoa(
             reader.result?.toString() || ''
           ) as string;
         } else if (filePickerTarget.value === tlsKeyRef.value) {
-          profile.value.tls.keyData = btoa(
+          profile.value.params.tls.keyData = btoa(
             reader.result?.toString() || ''
           ) as string;
         }
@@ -667,7 +681,8 @@ export default defineComponent({
       (value: string) => {
         if (isNewProfile) {
           return (
-            profiles.byName(value) === undefined || 'Profile name is taken'
+            networks.value.find((nw) => nw.id === value) &&
+            'Profile name is taken'
           );
         }
         return true;
@@ -685,14 +700,12 @@ export default defineComponent({
     return {
       Feature,
       AuthHeader,
+      Defaults,
       DefaultNetworkACL,
-      DefaultMeshDomain,
-      DefaultMeshIPv4Network,
       NetworkAuthMethod,
       title,
       isNewProfile,
       profile,
-      profiles,
       dialogRef,
       filePickerTarget,
       filePickerRef,

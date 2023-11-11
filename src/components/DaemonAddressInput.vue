@@ -21,22 +21,22 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { DefaultDaemonAddress, useClientStore } from '../stores/client';
+import { Defaults } from '@webmeshproject/vue';
+import { useDaemonStore } from 'src/stores/daemon';
 
 export default defineComponent({
   name: 'DaemonAddressInput',
   setup() {
-    const clientSettings = useClientStore();
-    const daemonAddress = ref<string>(clientSettings.daemonAddress);
+    const daemon = useDaemonStore();
+    const daemonAddress = ref<string>(daemon.address);
     const onUpdate = () => {
-      clientSettings.setDaemonAddress(daemonAddress.value);
+      daemon.setAddress(daemonAddress.value);
     };
     const onReset = () => {
-      daemonAddress.value = DefaultDaemonAddress;
+      daemonAddress.value = Defaults.daemonAddress;
       onUpdate();
     };
     return {
-      DefaultDaemonAddress,
       daemonAddress,
       onUpdate,
       onReset,

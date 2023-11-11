@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md row justify-start">
     <q-list class="col-12">
-      <q-item v-if="profiles.profiles.length === 0">
+      <q-item v-if="networks.value.length === 0">
         <q-item-section>
           <div class="column items-center justify-evenly">
             <div class="text-h6">
@@ -19,12 +19,12 @@
         </q-item-section>
       </q-item>
       <q-item
-        v-for="profile in profiles.profiles"
+        v-for="profile in networks.value"
         :key="profile.id"
         class="q-pa-sm"
       >
         <connection-profile-view
-          :profile="profile"
+          :profile="profile.params"
           @edit="onEditProfile"
           @export="onExportProfile"
           @delete="onDeleteProfile"
@@ -70,14 +70,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { QFile, useQuasar } from 'quasar';
-import { ConnectRequest } from '@webmesh/api/ts/v1/app_pb';
-import { useClientStore } from '../stores/client';
-import { ConnectionProfile, useProfileStore } from '../stores/profiles';
-
-import ConnectionProfileEditor from '../components/ConnectionProfileEditor.vue';
-import ConnectionProfileView from '../components/ConnectionProfileView.vue';
+import { NetworkParameters, useWebmesh } from '@webmeshproject/vue';
+import { useDaemonStore } from 'src/stores/daemon';
+import ConnectionProfileEditor from 'src/components/ConnectionProfileEditor.vue';
+import ConnectionProfileView from 'src/components/ConnectionProfileView.vue';
 
 export default defineComponent({
   name: 'MainPage',
@@ -91,17 +89,24 @@ export default defineComponent({
   },
   setup() {
     const q = useQuasar();
-    const client = useClientStore();
-    const profiles = useProfileStore();
+    const daemon = useDaemonStore();
+    const { putNetwork, drop, networks, error } = useWebmesh(daemon.options);
     const filePickerRef = ref<QFile | null>(null);
 
-    const onAddProfile = () => {
-      q.dialog({
-        component: ConnectionProfileEditor,
-      }).onOk((profile: ConnectionProfile) => {
-        profiles.put(profile);
+    const handleDaemonError = (err: Error, msg: string) => {
+      console.log(msg, err);
+      q.notify({
+        type: 'negative',
+        message: msg,
+        caption: err.message,
       });
     };
+
+    watch(error, (err) => {
+      if (err && err.value?.message) {
+        handleDaemonError(err.value, 'Error communicating with daemon');
+      }
+    });
 
     const onImportProfile = () => {
       filePickerRef.value?.pickFiles();
@@ -111,23 +116,16 @@ export default defineComponent({
       const reader = new FileReader();
       reader.onloadend = () => {
         const json = reader.result as string;
-        const profile = ConnectRequest.fromJsonString(json);
-        profiles.put({ ...profile } as ConnectionProfile);
+        const profile = JSON.parse(json) as NetworkParameters;
+        putNetwork(profile).catch((err: Error) => {
+          handleDaemonError(err, 'Error importing profile');
+        });
       };
       reader.readAsText(file);
     };
 
-    const onEditProfile = (profile: ConnectionProfile) => {
-      q.dialog({
-        component: ConnectionProfileEditor,
-        componentProps: { current: profile },
-      }).onOk((profile: ConnectionProfile) => {
-        profiles.put(profile);
-      });
-    };
-
-    const onExportProfile = (profile: ConnectionProfile) => {
-      const exported = new ConnectRequest(profile).toJsonString();
+    const onExportProfile = (profile: NetworkParameters) => {
+      const exported = JSON.stringify(profile, null, 2);
       const a = document.createElement('a');
       a.className = 'hidden';
       document.body.appendChild(a);
@@ -139,15 +137,35 @@ export default defineComponent({
       window.URL.revokeObjectURL(url);
     };
 
-    const onDeleteProfile = (profile: ConnectionProfile) => {
+    const onAddProfile = () => {
+      q.dialog({
+        component: ConnectionProfileEditor,
+      }).onOk((profile: NetworkParameters) => {
+        putNetwork(profile).catch((err: Error) => {
+          handleDaemonError(err, 'Error creating profile');
+        });
+      });
+    };
+
+    const onEditProfile = (profile: NetworkParameters) => {
+      q.dialog({
+        component: ConnectionProfileEditor,
+        componentProps: { current: profile },
+      }).onOk((profile: NetworkParameters) => {
+        putNetwork(profile).catch((err: Error) => {
+          handleDaemonError(err, 'Error updating profile');
+        });
+      });
+    };
+
+    const onDeleteProfile = (profile: NetworkParameters) => {
       q.dialog({
         title: 'Delete Profile',
         message: `Are you sure you want to delete the profile ${profile.id}?`,
         cancel: true,
         persistent: true,
       }).onOk(() => {
-        profiles.delete(profile);
-        client.drop(profile.id).catch((err: Error) => {
+        drop(profile.id).catch((err: Error) => {
           console.log('Error communicating with daemon', err);
           q.notify({
             type: 'negative',
@@ -158,7 +176,7 @@ export default defineComponent({
     };
 
     return {
-      profiles,
+      networks,
       filePickerRef,
       onAddProfile,
       onImportProfile,
