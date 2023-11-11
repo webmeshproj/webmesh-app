@@ -617,9 +617,20 @@ export default defineComponent({
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
     const q = useQuasar();
-
+    const isNewProfile = !props.current?.id;
+    const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
+    const profile = ref<NetworkParameters>(
+      props.current ? { ...props.current } : Defaults.parameters()
+    );
     const daemon = useDaemonStore();
     const { networks, error } = useWebmesh(daemon.options);
+
+    const caCertRef = ref<QInput | null>(null);
+    const tlsCertRef = ref<QInput | null>(null);
+    const tlsKeyRef = ref<QInput | null>(null);
+    const filePickerTarget = ref<QInput | null>(null);
+    const filePickerRef = ref<QFile | null>(null);
+    const nameInputRef = ref<QInput | null>(null);
 
     watch(error, (err) => {
       if (err && err.value?.message) {
@@ -633,26 +644,31 @@ export default defineComponent({
       }
     });
 
-    const isNewProfile = !props.current?.id;
-    const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
+    const nameRules = [
+      (value: string) => {
+        return (value && value.length > 0) || 'Profile name is required';
+      },
+      (value: string) => {
+        if (isNewProfile) {
+          return (
+            networks.value.find((nw) => nw.id === value) &&
+            'Profile name is taken'
+          );
+        }
+        return true;
+      },
+    ] as Validator[];
 
-    const profile = ref<NetworkParameters>(
-      props.current ? { ...props.current } : Defaults.parameters()
-    );
-    const onReset = () =>
-      (profile.value = props.current
+    const onReset = () => {
+      profile.value = props.current
         ? { ...props.current }
-        : Defaults.parameters());
-
-    const caCertRef = ref<QInput | null>(null);
-    const tlsCertRef = ref<QInput | null>(null);
-    const tlsKeyRef = ref<QInput | null>(null);
-    const filePickerTarget = ref<QInput | null>(null);
-    const filePickerRef = ref<QFile | null>(null);
+        : Defaults.parameters();
+    };
 
     const pickTLSFile = () => {
       filePickerRef.value?.pickFiles();
     };
+
     const onPickedTLSFile = (file: File) => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -672,22 +688,6 @@ export default defineComponent({
       };
       reader.readAsText(file);
     };
-
-    const nameInputRef = ref<QInput | null>(null);
-    const nameRules = [
-      (value: string) => {
-        return (value && value.length > 0) || 'Profile name is required';
-      },
-      (value: string) => {
-        if (isNewProfile) {
-          return (
-            networks.value.find((nw) => nw.id === value) &&
-            'Profile name is taken'
-          );
-        }
-        return true;
-      },
-    ] as Validator[];
 
     const onSubmit = () => {
       nameInputRef?.value?.validate();
