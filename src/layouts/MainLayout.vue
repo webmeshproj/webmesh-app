@@ -31,9 +31,9 @@
 import { defineComponent } from 'vue';
 import { useQuasar } from 'quasar';
 
-import DaemonInfoDialog from '../components/DaemonInfoDialog.vue';
-import DaemonAddressInput from '../components/DaemonAddressInput.vue';
-import DarkModeSwitch from '../components/DarkModeSwitch.vue';
+import DaemonInfoDialog from 'src/components/DaemonInfoDialog.vue';
+import DaemonAddressInput from 'src/components/DaemonAddressInput.vue';
+import DarkModeSwitch from 'src/components/DarkModeSwitch.vue';
 
 export default defineComponent({
   name: 'MainLayout',

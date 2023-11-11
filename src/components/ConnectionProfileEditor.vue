@@ -596,7 +596,8 @@ import {
 } from '@webmeshproject/api/v1/app_pb';
 import { Feature } from '@webmeshproject/api/v1/node_pb';
 import { Defaults, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
-import { useDaemonStore } from 'src/stores/daemon';
+
+import { useDaemon } from 'src/stores/daemon';
 
 const NewConnectionTitle = 'New Connection Profile';
 const EditConnectionTitle = 'Edit Connection Profile';
@@ -622,7 +623,7 @@ export default defineComponent({
     const profile = ref<NetworkParameters>(
       props.current ? { ...props.current } : Defaults.parameters()
     );
-    const daemon = useDaemonStore();
+    const daemon = useDaemon();
     const { networks, error } = useWebmesh(daemon.options);
 
     const caCertRef = ref<QInput | null>(null);

@@ -100,7 +100,8 @@ import { defineComponent, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { DaemonConnStatus } from '@webmeshproject/api/v1/app_pb';
 import { Network, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
-import { useDaemonStore } from 'src/stores/daemon';
+
+import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({
   name: 'ConnectionProfileView',
@@ -140,7 +141,7 @@ export default defineComponent({
   },
   setup(props) {
     const q = useQuasar();
-    const daemon = useDaemonStore();
+    const daemon = useDaemon();
     const { connect, disconnect, metrics, getNetwork, error } = useWebmesh(
       daemon.options
     );

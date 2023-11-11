@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
 import { Defaults, Options } from '@webmeshproject/vue';
 
-export const useDaemonStore = defineStore('daemon', {
+export const useDaemon = defineStore('daemon', {
   persist:
     Platform.is.electron ||
     Platform.is.nativeMobile ||

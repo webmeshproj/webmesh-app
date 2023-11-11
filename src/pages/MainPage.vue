@@ -73,7 +73,8 @@
 import { defineComponent, ref, watch } from 'vue';
 import { QFile, useQuasar } from 'quasar';
 import { NetworkParameters, useWebmesh } from '@webmeshproject/vue';
-import { useDaemonStore } from 'src/stores/daemon';
+
+import { useDaemon } from 'src/stores/daemon';
 import ConnectionProfileEditor from 'src/components/ConnectionProfileEditor.vue';
 import ConnectionProfileView from 'src/components/ConnectionProfileView.vue';
 
@@ -89,7 +90,7 @@ export default defineComponent({
   },
   setup() {
     const q = useQuasar();
-    const daemon = useDaemonStore();
+    const daemon = useDaemon();
     const { putNetwork, drop, networks, error } = useWebmesh(daemon.options);
     const filePickerRef = ref<QFile | null>(null);
 

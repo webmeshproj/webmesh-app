@@ -40,7 +40,8 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar, useDialogPluginComponent } from 'quasar';
 import { DaemonStatus } from '@webmeshproject/api/v1/app_pb';
 import { useWebmesh } from '@webmeshproject/vue';
-import { useDaemonStore } from 'src/stores/daemon';
+
+import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({
   name: 'DaemonInfoDialog',
@@ -50,7 +51,7 @@ export default defineComponent({
       useDialogPluginComponent();
     const loading = ref(true);
     const status = ref(new DaemonStatus());
-    const daemon = useDaemonStore();
+    const daemon = useDaemon();
     const { daemonStatus } = useWebmesh(daemon.options);
     const q = useQuasar();
     onMounted(() => {
