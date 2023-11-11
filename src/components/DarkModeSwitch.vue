@@ -18,6 +18,7 @@ export default defineComponent({
   name: 'DarkModeSwitch',
   setup() {
     const q = useQuasar();
+    q.dark.set('auto');
     const mode = ref<boolean | 'auto'>(q.dark.mode);
     const onClick = () => {
       console.log('Setting dark mode to ' + mode.value);

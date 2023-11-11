@@ -23,7 +23,9 @@
         </q-item>
         <div class="col-12 text-subtitle1">{{ status.description }}</div>
         <div class="col-12 text-subtitle1">Version: {{ status.version }}</div>
-        <div class="col-12 text-caption">Commit: {{ status.gitCommit }}</div>
+        <div class="q-mt-md col-12 text-caption">
+          Commit: {{ status.gitCommit }}
+        </div>
         <div class="col-12 text-caption">
           Build Date: {{ status.buildDate }}
         </div>

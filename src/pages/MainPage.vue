@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md row justify-start">
     <q-list class="col-12">
-      <q-item v-if="networks.value.length === 0">
+      <q-item v-if="networks.value?.length">
         <q-item-section>
           <div class="column items-center justify-evenly">
             <div class="text-h6">
