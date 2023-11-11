@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md row justify-start">
     <q-list class="col-12">
-      <q-item v-if="networks.value?.length">
+      <q-item v-if="networks.length === 0">
         <q-item-section>
           <div class="column items-center justify-evenly">
             <div class="text-h6">
@@ -18,11 +18,7 @@
           </div>
         </q-item-section>
       </q-item>
-      <q-item
-        v-for="profile in networks.value"
-        :key="profile.id"
-        class="q-pa-sm"
-      >
+      <q-item v-for="profile in networks" :key="profile.id" class="q-pa-sm">
         <connection-profile-view
           :profile="profile.params"
           @edit="onEditProfile"
@@ -91,9 +87,10 @@ export default defineComponent({
   setup() {
     const q = useQuasar();
     const daemon = useDaemon();
-    const { putNetwork, drop, networks, error } = useWebmesh(daemon.options);
+    const { putNetwork, dropNetwork, networks, error } = useWebmesh(
+      daemon.options
+    );
     const filePickerRef = ref<QFile | null>(null);
-
     const handleDaemonError = (err: Error, msg: string) => {
       console.log(msg, err);
       q.notify({
@@ -104,8 +101,8 @@ export default defineComponent({
     };
 
     watch(error, (err) => {
-      if (err && err.value?.message) {
-        handleDaemonError(err.value, 'Error communicating with daemon');
+      if (err && err.message) {
+        handleDaemonError(err, 'Error communicating with daemon');
       }
     });
 
@@ -166,7 +163,7 @@ export default defineComponent({
         cancel: true,
         persistent: true,
       }).onOk(() => {
-        drop(profile.id).catch((err: Error) => {
+        dropNetwork(profile.id).catch((err: Error) => {
           console.log('Error communicating with daemon', err);
           q.notify({
             type: 'negative',
@@ -175,6 +172,8 @@ export default defineComponent({
         });
       });
     };
+
+    console.log(networks);
 
     return {
       networks,

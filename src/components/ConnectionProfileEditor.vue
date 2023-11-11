@@ -634,11 +634,11 @@ export default defineComponent({
     const nameInputRef = ref<QInput | null>(null);
 
     watch(error, (err) => {
-      if (err && err.value?.message) {
+      if (err && err.message) {
         q.notify({
           type: 'negative',
           message: 'Error communicating with daemon',
-          caption: err.value?.message,
+          caption: err.message,
           position: 'top',
           timeout: 3000,
         });

@@ -31,7 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "@webmeshproject/api": "^0.12.2",
-    "@webmeshproject/vue": "^0.0.4",
+    "@webmeshproject/vue": "^0.0.7",
     "autoprefixer": "^10.4.2",
     "electron": "^27.0.3",
     "electron-builder": "^24.3.0",
@@ -44,7 +44,7 @@
     "prettier": "^2.5.1",
     "quasar": "^2.6.0",
     "typescript": "^4.5.4",
-    "vue": "^3.0.0",
+    "vue": "^3.3.0",
     "vue-router": "^4.0.0"
   },
   "engines": {

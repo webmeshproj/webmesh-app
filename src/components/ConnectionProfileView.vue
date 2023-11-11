@@ -80,9 +80,9 @@
           </div>
           <div>
             <strong class="q-px-sm">Total Transmit:</strong>
-            {{ interfaceMetrics.value?.totalTransmitBytes }}
+            {{ interfaceMetrics?.totalTransmitBytes }}
             <strong class="q-px-sm">Total Receive:</strong>
-            {{ interfaceMetrics.value?.totalReceiveBytes }}
+            {{ interfaceMetrics?.totalReceiveBytes }}
           </div>
         </div>
       </q-expansion-item>
@@ -159,8 +159,8 @@ export default defineComponent({
     };
 
     watch(error, (err) => {
-      if (err && err.value?.message) {
-        handleDaemonError(err.value, 'Error communicating with daemon');
+      if (err && err.message) {
+        handleDaemonError(err, 'Error communicating with daemon');
       }
     });
 
@@ -180,8 +180,7 @@ export default defineComponent({
                 break;
             }
           })
-          .catch((err: Error) => {
-            handleDaemonError(err, 'Error retrieving connection status');
+          .catch(() => {
             resolve(false);
           });
       });
