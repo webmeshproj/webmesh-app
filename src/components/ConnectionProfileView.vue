@@ -147,7 +147,7 @@ export default defineComponent({
     );
     const network = ref<Network | null>(null);
     const connected = ref<boolean | null>(false);
-    const interfaceMetrics = metrics(props.profile.id);
+    const interfaceMetrics = metrics(props.profile.id, 3000);
 
     const handleDaemonError = (err: Error, msg: string) => {
       console.log(msg, err);

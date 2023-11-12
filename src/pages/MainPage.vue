@@ -173,8 +173,6 @@ export default defineComponent({
       });
     };
 
-    console.log(networks);
-
     return {
       networks,
       filePickerRef,
