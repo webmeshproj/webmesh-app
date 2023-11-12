@@ -618,14 +618,14 @@ export default defineComponent({
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
     const q = useQuasar();
-    const isNewProfile = !props.current?.id;
-    const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
     const profile = ref<NetworkParameters>(
       props.current ? { ...props.current } : Defaults.parameters()
     );
     const daemon = useDaemon();
     const { networks, error } = useWebmesh(daemon.options);
 
+    const isNewProfile = !props.current?.id;
+    const title = isNewProfile ? NewConnectionTitle : EditConnectionTitle;
     const caCertRef = ref<QInput | null>(null);
     const tlsCertRef = ref<QInput | null>(null);
     const tlsKeyRef = ref<QInput | null>(null);
