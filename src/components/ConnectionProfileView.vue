@@ -80,9 +80,9 @@
           </div>
           <div>
             <strong class="q-px-sm">Total Transmit:</strong>
-            {{ interfaceMetrics?.totalTransmitBytes }}
+            {{ humanFileSize(Number(interfaceMetrics?.totalTransmitBytes)) }}
             <strong class="q-px-sm">Total Receive:</strong>
-            {{ interfaceMetrics?.totalReceiveBytes }}
+            {{ humanFileSize(Number(interfaceMetrics?.totalReceiveBytes)) }}
           </div>
         </div>
       </q-expansion-item>
@@ -186,6 +186,16 @@ export default defineComponent({
       });
     };
 
+    const humanFileSize = (size: number): string => {
+      if (size === Number('NaN')) return '0 B';
+      const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+      return (
+        (size / Math.pow(1024, i)).toFixed(2) +
+        ' ' +
+        ['B', 'kB', 'MB', 'GB', 'TB'][i]
+      );
+    };
+
     const onClickConnectSwitch = (newValue: boolean | null) => {
       switch (newValue) {
         case false:
@@ -230,6 +240,7 @@ export default defineComponent({
       connected,
       network,
       interfaceMetrics,
+      humanFileSize,
       onClickConnectSwitch,
     };
   },
