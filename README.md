@@ -18,6 +18,10 @@ Instead, follow the [Webmesh installation instructions](https://webmeshproj.gith
 sudo systemctl enable --now webmeshd
 ```
 
+## Demo
+
+_Coming soon_
+
 ## Development
 
 ### Install the dependencies
