@@ -687,10 +687,10 @@
     "@bufbuild/protobuf" "^1.4.1"
     "@connectrpc/connect" "^1.1.3"
 
-"@webmeshproject/vue@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@webmeshproject/vue/-/vue-0.0.7.tgz#c6415aea0c28b9c045e09a986c148868f8c7c105"
-  integrity sha512-DbMldhRglfQ4/Zpd4bHKqnIN6FKukV0WwaeHzP3hMkAWQc88hap4gZ3fRP8T5eqJwiFRQCRYYt3Gjtjuu8X+6g==
+"@webmeshproject/vue@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@webmeshproject/vue/-/vue-0.0.8.tgz#94c08b051e24ae2c5f29722a6fcdb9e9c3af075c"
+  integrity sha512-jZX96tfGE23uh5TKkOPIu1DpFr0KGCU4XyWnjTm+RdODqB9Lj+afPNYjEWdxBLfqs/WfcF47pA4ghCXpRFbXvw==
   dependencies:
     "@connectrpc/connect" "^1.1.3"
     "@connectrpc/connect-web" "^1.1.3"

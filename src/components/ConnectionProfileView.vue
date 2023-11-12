@@ -80,9 +80,9 @@
           </div>
           <div>
             <strong class="q-px-sm">Total Transmit:</strong>
-            {{ humanFileSize(Number(interfaceMetrics?.totalTransmitBytes)) }}
+            {{ humanFileSize(Number(metrics?.totalTransmitBytes)) }}
             <strong class="q-px-sm">Total Receive:</strong>
-            {{ humanFileSize(Number(interfaceMetrics?.totalReceiveBytes)) }}
+            {{ humanFileSize(Number(metrics?.totalReceiveBytes)) }}
           </div>
         </div>
       </q-expansion-item>
@@ -142,12 +142,11 @@ export default defineComponent({
   setup(props) {
     const q = useQuasar();
     const daemon = useDaemon();
-    const { connect, disconnect, metrics, getNetwork, error } = useWebmesh(
-      daemon.options
-    );
+    const { connect, disconnect, deviceMetrics, getNetwork, error } =
+      useWebmesh(daemon.options);
+    const metrics = deviceMetrics(props.profile.id, 3000);
     const network = ref<Network | null>(null);
     const connected = ref<boolean | null>(false);
-    const interfaceMetrics = metrics(props.profile.id, 3000);
 
     const handleDaemonError = (err: Error, msg: string) => {
       console.log(msg, err);
@@ -239,7 +238,7 @@ export default defineComponent({
     return {
       connected,
       network,
-      interfaceMetrics,
+      metrics,
       humanFileSize,
       onClickConnectSwitch,
     };
