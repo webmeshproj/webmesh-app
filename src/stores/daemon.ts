@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
-import { Defaults } from '@webmeshproject/api/utils/networks';
+import { DefaultDaemonAddress } from '@webmeshproject/api/utils/daemon';
 import { DaemonOptions } from '@webmeshproject/vue';
 
 export const useDaemon = defineStore('daemon', {
@@ -10,7 +10,7 @@ export const useDaemon = defineStore('daemon', {
     process.env.PERSIST_DATA === 'true',
 
   state: () => ({
-    daemonAddress: Defaults.daemonAddress,
+    daemonAddress: DefaultDaemonAddress,
   }),
 
   getters: {
