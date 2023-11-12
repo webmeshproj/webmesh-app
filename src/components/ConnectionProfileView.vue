@@ -99,8 +99,8 @@
 import { defineComponent, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { DaemonConnStatus } from '@webmeshproject/api/v1/app_pb';
-import { Network, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
-
+import { Network, NetworkParameters } from '@webmeshproject/api/utils/networks';
+import { useWebmesh } from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({
@@ -186,7 +186,7 @@ export default defineComponent({
     };
 
     const humanFileSize = (size: number): string => {
-      if (size === Number('NaN')) return '0 B';
+      if (size === Number(NaN)) return '0 B';
       const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
       return (
         (size / Math.pow(1024, i)).toFixed(2) +

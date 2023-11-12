@@ -21,8 +21,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { Defaults } from '@webmeshproject/vue';
-
+import { Defaults } from '@webmeshproject/api/utils/networks';
 import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({

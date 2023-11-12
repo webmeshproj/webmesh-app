@@ -679,22 +679,22 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.3.8.tgz#f044942142e1d3a395f24132e6203a784838542d"
   integrity sha512-8PGwybFwM4x8pcfgqEQFy70NaQxASvOC5DJwLQfpArw1UDfUXrJkdxD3BhVTMS+0Lef/TU7YO0Jvr0jJY8T+mw==
 
-"@webmeshproject/api@^0.12.2":
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/@webmeshproject/api/-/api-0.12.2.tgz#60f08bc104c4a379968b6585bf11eba92f02d862"
-  integrity sha512-jUCAph0wgnZFKj93s5Cfsqi31YZxZixebC8/+fB+3HSN/EYwsNdm0j4yXXeog3lSdPkW82uxbrRCuCIGGLmE/g==
+"@webmeshproject/api@^0.12.7":
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/@webmeshproject/api/-/api-0.12.7.tgz#2b4049625f4422e479d2166d16a067879f0dec90"
+  integrity sha512-64ObXaIkWMX1w8OIv+kJHGZoTzE3ncNdYz4zi+PWYH7fRgGnFciM0P6fOwrLq9V6vDF/ozKvGdOEs6TI0VTaAQ==
   dependencies:
     "@bufbuild/protobuf" "^1.4.1"
     "@connectrpc/connect" "^1.1.3"
 
-"@webmeshproject/vue@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@webmeshproject/vue/-/vue-0.0.8.tgz#94c08b051e24ae2c5f29722a6fcdb9e9c3af075c"
-  integrity sha512-jZX96tfGE23uh5TKkOPIu1DpFr0KGCU4XyWnjTm+RdODqB9Lj+afPNYjEWdxBLfqs/WfcF47pA4ghCXpRFbXvw==
+"@webmeshproject/vue@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@webmeshproject/vue/-/vue-0.0.11.tgz#5910e2937689fcd2f40165193aa22b50ee3cf777"
+  integrity sha512-FTXG47az1UPWFC42zon1astTIUNtJEgEISDEPgczwlE8RjyegfcsfqnS+0m4KE6ql6Manf9pKG3ByeANhaAPIg==
   dependencies:
     "@connectrpc/connect" "^1.1.3"
     "@connectrpc/connect-web" "^1.1.3"
-    "@webmeshproject/api" "^0.12.2"
+    "@webmeshproject/api" "^0.12.7"
     vue "^3.3.0"
 
 "@xmldom/xmldom@^0.8.8":
