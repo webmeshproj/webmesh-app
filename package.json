@@ -31,7 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "@webmeshproject/api": "^0.12.7",
-    "@webmeshproject/vue": "^0.0.11",
+    "@webmeshproject/vue": "^0.0.15",
     "autoprefixer": "^10.4.2",
     "electron": "^27.0.3",
     "electron-builder": "^24.3.0",

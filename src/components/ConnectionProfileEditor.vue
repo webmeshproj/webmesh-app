@@ -595,11 +595,7 @@ import {
   MeshConnBootstrap_DefaultNetworkACL as DefaultNetworkACL,
 } from '@webmeshproject/api/v1/app_pb';
 import { Feature } from '@webmeshproject/api/v1/node_pb';
-import {
-  Defaults,
-  NetworkParameters,
-} from '@webmeshproject/api/utils/networks';
-import { useWebmesh } from '@webmeshproject/vue';
+import { Defaults, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 const NewConnectionTitle = 'New Connection Profile';

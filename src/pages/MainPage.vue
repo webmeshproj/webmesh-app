@@ -68,8 +68,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 import { QFile, useQuasar } from 'quasar';
-import { NetworkParameters } from '@webmeshproject/api/utils/networks';
-import { useWebmesh } from '@webmeshproject/vue';
+import { NetworkParameters, useWebmesh } from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 import ConnectionProfileEditor from 'src/components/ConnectionProfileEditor.vue';

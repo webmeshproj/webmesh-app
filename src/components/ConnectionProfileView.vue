@@ -99,8 +99,7 @@
 import { defineComponent, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { DaemonConnStatus } from '@webmeshproject/api/v1/app_pb';
-import { Network, NetworkParameters } from '@webmeshproject/api/utils/networks';
-import { useWebmesh } from '@webmeshproject/vue';
+import { Network, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({

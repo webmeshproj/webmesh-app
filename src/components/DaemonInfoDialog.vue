@@ -40,8 +40,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import { useQuasar, useDialogPluginComponent } from 'quasar';
-import { DaemonStatus } from '@webmeshproject/api/v1/app_pb';
-import { useWebmesh } from '@webmeshproject/vue';
+import { DaemonStatus, useWebmesh } from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({
