@@ -98,8 +98,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
-import { DaemonConnStatus } from '@webmeshproject/api/v1/app_pb';
-import { Network, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
+import {
+  ConnectionStatus,
+  Network,
+  NetworkParameters,
+  useWebmesh,
+} from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 export default defineComponent({
@@ -167,13 +171,13 @@ export default defineComponent({
         getNetwork(props.profile.id)
           .then((nw: Network) => {
             switch (nw.status) {
-              case DaemonConnStatus.DISCONNECTED:
+              case ConnectionStatus.DISCONNECTED:
                 resolve(false);
                 break;
-              case DaemonConnStatus.CONNECTED:
+              case ConnectionStatus.CONNECTED:
                 resolve(true);
                 break;
-              case DaemonConnStatus.CONNECTING:
+              case ConnectionStatus.CONNECTING:
                 resolve(null);
                 break;
             }

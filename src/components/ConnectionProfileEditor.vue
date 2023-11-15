@@ -590,12 +590,14 @@
 import { defineComponent, ref, watch } from 'vue';
 import { QInput, QFile, useDialogPluginComponent, useQuasar } from 'quasar';
 import {
+  AuthHeader,
+  Defaults,
+  DefaultNetworkACL,
+  Feature,
   NetworkAuthMethod,
-  ConnectionParameters_AuthHeader as AuthHeader,
-  MeshConnBootstrap_DefaultNetworkACL as DefaultNetworkACL,
-} from '@webmeshproject/api/v1/app_pb';
-import { Feature } from '@webmeshproject/api/v1/node_pb';
-import { Defaults, NetworkParameters, useWebmesh } from '@webmeshproject/vue';
+  NetworkParameters,
+  useWebmesh,
+} from '@webmeshproject/vue';
 import { useDaemon } from 'src/stores/daemon';
 
 const NewConnectionTitle = 'New Connection Profile';
