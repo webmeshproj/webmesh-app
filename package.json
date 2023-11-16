@@ -1,6 +1,6 @@
 {
   "name": "webmesh",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "An application for connecting to Webmesh networks",
   "productName": "Webmesh",
   "author": "Avi Zimmerman <avi.zimmerman@gmail.com>",
